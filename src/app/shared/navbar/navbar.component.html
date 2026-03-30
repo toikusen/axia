@@ -1,0 +1,59 @@
+<nav
+  class="fixed top-0 left-0 right-0 z-50 transition-all duration-300"
+  [ngClass]="scrolled() ? 'bg-bg backdrop-blur-sm border-b border-border' : 'bg-transparent'"
+>
+  <div class="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
+    <!-- Logo -->
+    <a routerLink="/" class="axia-logo text-xl" (click)="closeMenu()">AXIA</a>
+
+    <!-- Desktop Nav -->
+    <div class="hidden lg:flex items-center gap-8">
+      @for (link of navLinks; track link.path) {
+        <a
+          [routerLink]="link.path"
+          routerLinkActive="active"
+          [routerLinkActiveOptions]="{ exact: false }"
+          class="nav-link"
+        >{{ link.label }}</a>
+      }
+    </div>
+
+    <!-- Mobile Hamburger -->
+    <button
+      class="lg:hidden flex flex-col gap-1.5 p-2 cursor-pointer"
+      (click)="toggleMenu()"
+      aria-label="選單"
+    >
+      <span
+        class="block w-6 h-px bg-text-primary transition-all duration-200"
+        [ngClass]="menuOpen() ? 'rotate-45 translate-y-2' : ''"
+      ></span>
+      <span
+        class="block w-6 h-px bg-text-primary transition-all duration-200"
+        [ngClass]="menuOpen() ? 'opacity-0' : ''"
+      ></span>
+      <span
+        class="block w-6 h-px bg-text-primary transition-all duration-200"
+        [ngClass]="menuOpen() ? '-rotate-45 -translate-y-2' : ''"
+      ></span>
+    </button>
+  </div>
+
+  <!-- Mobile Menu -->
+  <div
+    class="lg:hidden overflow-hidden transition-all duration-300 bg-bg-secondary border-b border-border"
+    [ngClass]="menuOpen() ? 'max-h-screen py-4' : 'max-h-0'"
+  >
+    <div class="px-6 flex flex-col gap-4">
+      @for (link of navLinks; track link.path) {
+        <a
+          [routerLink]="link.path"
+          routerLinkActive="active"
+          [routerLinkActiveOptions]="{ exact: false }"
+          class="nav-link text-sm py-1"
+          (click)="closeMenu()"
+        >{{ link.label }}</a>
+      }
+    </div>
+  </div>
+</nav>
