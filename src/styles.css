@@ -5,9 +5,12 @@
 
 @layer base {
   html {
-    background-color: #222428;
-    color: #ddd8cf;
-    scroll-behavior: smooth;
+    background-color: theme('colors.bg.DEFAULT');
+    color: theme('colors.text-primary');
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    html { scroll-behavior: smooth; }
   }
 
   body {
@@ -16,15 +19,15 @@
   }
 
   ::selection {
-    background-color: #c8a882;
-    color: #222428;
+    background-color: theme('colors.accent.DEFAULT');
+    color: theme('colors.bg.DEFAULT');
   }
 
   /* 捲軸樣式 */
   ::-webkit-scrollbar { width: 4px; }
-  ::-webkit-scrollbar-track { background: #222428; }
-  ::-webkit-scrollbar-thumb { background: #3a3c42; border-radius: 2px; }
-  ::-webkit-scrollbar-thumb:hover { background: #c8a882; }
+  ::-webkit-scrollbar-track { background: theme('colors.bg.DEFAULT'); }
+  ::-webkit-scrollbar-thumb { background: theme('colors.border.DEFAULT'); border-radius: 2px; }
+  ::-webkit-scrollbar-thumb:hover { background: theme('colors.accent.DEFAULT'); }
 }
 
 @layer components {
