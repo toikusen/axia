@@ -1,4 +1,53 @@
-/* You can add global styles to this file, and also import other style files */
+/* src/styles.css */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer base {
+  html {
+    background-color: #222428;
+    color: #ddd8cf;
+    scroll-behavior: smooth;
+  }
+
+  body {
+    font-family: 'Noto Sans TC', sans-serif;
+    min-height: 100dvh;
+  }
+
+  ::selection {
+    background-color: #c8a882;
+    color: #222428;
+  }
+
+  /* 捲軸樣式 */
+  ::-webkit-scrollbar { width: 4px; }
+  ::-webkit-scrollbar-track { background: #222428; }
+  ::-webkit-scrollbar-thumb { background: #3a3c42; border-radius: 2px; }
+  ::-webkit-scrollbar-thumb:hover { background: #c8a882; }
+}
+
+@layer components {
+  .axia-logo {
+    @apply font-display tracking-widest2 text-text-primary;
+  }
+  .nav-link {
+    @apply text-text-secondary text-xs tracking-widest uppercase transition-colors duration-200 hover:text-accent;
+  }
+  .nav-link.active {
+    @apply text-accent border-b border-accent pb-0.5;
+  }
+  .section-label {
+    @apply text-accent text-xs tracking-widest uppercase;
+  }
+  .divider {
+    @apply border-t border-border my-8;
+  }
+  .card {
+    @apply bg-bg-secondary border border-border rounded-sm hover:border-accent/50 transition-colors duration-300;
+  }
+  .btn-primary {
+    @apply bg-transparent border border-accent text-accent text-xs tracking-widest uppercase px-6 py-2.5
+           hover:bg-accent hover:text-bg transition-all duration-200 cursor-pointer;
+  }
+}
