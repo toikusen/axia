@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, computed, inject } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
-import { ActivatedRoute, NavigationEnd, Router, RouterModule, RouterOutlet } from '@angular/router';
+import { ActivatedRouteSnapshot, NavigationEnd, Router, RouterModule, RouterOutlet } from '@angular/router';
 import { ButtonModule } from 'primeng/button';
 import { filter, map, startWith } from 'rxjs/operators';
 import { AuthService } from '../../core/services/auth.service';
@@ -73,7 +73,6 @@ interface AdminNavItem {
 export class AdminLayoutComponent {
   protected readonly authService = inject(AuthService);
   private readonly router = inject(Router);
-  private readonly activatedRoute = inject(ActivatedRoute);
 
   protected readonly navItems: AdminNavItem[] = [
     { label: 'Dashboard', link: '/admin/dashboard' },
@@ -95,7 +94,7 @@ export class AdminLayoutComponent {
       startWith(null),
       map(() => this.resolveTitle())
     ),
-    { initialValue: this.resolveTitle() }
+    { initialValue: 'Dashboard' }
   );
 
   protected readonly pageTitle = computed(() => this.routeTitle());
@@ -105,12 +104,12 @@ export class AdminLayoutComponent {
   }
 
   private resolveTitle(): string {
-    let currentRoute = this.activatedRoute.firstChild;
+    let currentRoute: ActivatedRouteSnapshot | null = this.router.routerState.snapshot.root;
 
     while (currentRoute?.firstChild) {
       currentRoute = currentRoute.firstChild;
     }
 
-    return currentRoute?.snapshot.data['title'] as string | undefined ?? 'Dashboard';
+    return (currentRoute?.data?.['title'] as string | undefined) ?? 'Dashboard';
   }
 }
