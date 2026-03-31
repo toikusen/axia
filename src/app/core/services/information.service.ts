@@ -3,9 +3,15 @@ import { from, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { supabase } from '../supabase.client';
 import { Information } from '../models/information.model';
+import { BaseAdminCrudService } from './base-admin-crud.service';
+import { VersionService } from './version.service';
 
 @Injectable({ providedIn: 'root' })
-export class InformationService {
+export class InformationService extends BaseAdminCrudService<Information> {
+  constructor(versionService: VersionService) {
+    super('information', versionService);
+  }
+
   getAll(): Observable<Information[]> {
     return from(
       supabase
@@ -45,5 +51,9 @@ export class InformationService {
       if (error) throw error;
       return data as Information;
     }));
+  }
+
+  listAdmin(): Promise<Information[]> {
+    return this.listAll('published_at', false);
   }
 }

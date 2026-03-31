@@ -1,14 +1,8 @@
 import { Injectable } from '@angular/core';
 import { from, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { HomeSettings } from '../models/home-settings.model';
 import { supabase } from '../supabase.client';
-
-export interface HomeSettings {
-  id: string;
-  hero_image_url: string | null;
-  sns_links: Record<string, string>;
-  updated_at: string;
-}
 
 @Injectable({ providedIn: 'root' })
 export class HomeSettingsService {
@@ -19,5 +13,33 @@ export class HomeSettingsService {
       if (error) throw error;
       return data as HomeSettings;
     }));
+  }
+
+  async getAdmin(): Promise<HomeSettings> {
+    const { data, error } = await supabase.from('home_settings').select('*').single();
+
+    if (error) {
+      throw error;
+    }
+
+    return data as HomeSettings;
+  }
+
+  async update(id: string, payload: Partial<HomeSettings>): Promise<HomeSettings> {
+    const { data, error } = await supabase
+      .from('home_settings')
+      .update({
+        ...payload,
+        updated_at: new Date().toISOString(),
+      })
+      .eq('id', id)
+      .select()
+      .single();
+
+    if (error) {
+      throw error;
+    }
+
+    return data as HomeSettings;
   }
 }

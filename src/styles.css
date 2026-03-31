@@ -1,4 +1,6 @@
 /* src/styles.css */
+@import 'primeicons/primeicons.css';
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -16,6 +18,7 @@
   body {
     font-family: 'Noto Sans TC', sans-serif;
     min-height: 100dvh;
+    margin: 0;
   }
 
   ::selection {
@@ -52,5 +55,53 @@
   .btn-primary {
     @apply bg-transparent border border-accent text-accent text-xs tracking-widest uppercase px-6 py-2.5
            hover:bg-accent hover:text-bg transition-all duration-200 cursor-pointer;
+  }
+
+  .admin-surface {
+    background:
+      radial-gradient(circle at top left, rgba(200, 168, 130, 0.12), transparent 30%),
+      linear-gradient(180deg, #171412 0%, #0f0d0b 100%);
+    color: #f5efe7;
+  }
+
+  .admin-panel {
+    background: rgba(34, 29, 24, 0.92);
+    border: 1px solid rgba(200, 168, 130, 0.18);
+    border-radius: 1rem;
+    box-shadow: 0 24px 60px rgba(0, 0, 0, 0.28);
+  }
+
+  .admin-input,
+  .admin-textarea {
+    width: 100%;
+  }
+
+  .admin-data-table table {
+    width: 100%;
+  }
+
+  .admin-data-table th,
+  .admin-data-table td {
+    border-bottom: 1px solid rgba(200, 168, 130, 0.12);
+    padding: 1rem 0.75rem;
+    text-align: left;
+    vertical-align: top;
+  }
+
+  .admin-data-table th {
+    color: #d9c2a8;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  .admin-prose {
+    color: #f5efe7;
+    line-height: 1.7;
+  }
+
+  .admin-prose a {
+    color: #d9c2a8;
   }
 }

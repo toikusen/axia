@@ -3,9 +3,15 @@ import { from, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { supabase } from '../supabase.client';
 import { Schedule } from '../models/schedule.model';
+import { BaseAdminCrudService } from './base-admin-crud.service';
+import { VersionService } from './version.service';
 
 @Injectable({ providedIn: 'root' })
-export class ScheduleService {
+export class ScheduleService extends BaseAdminCrudService<Schedule> {
+  constructor(versionService: VersionService) {
+    super('schedule', versionService);
+  }
+
   getAll(): Observable<Schedule[]> {
     return from(
       supabase
@@ -31,5 +37,9 @@ export class ScheduleService {
       if (error) throw error;
       return data as Schedule[];
     }));
+  }
+
+  listAdmin(): Promise<Schedule[]> {
+    return this.listAll('event_date', true);
   }
 }
