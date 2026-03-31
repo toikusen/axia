@@ -9,18 +9,23 @@ import { formatDateLabel } from '../shared/admin.utils';
   standalone: true,
   imports: [CommonModule, TableModule],
   template: `
-    <section class="space-y-6">
-      <header>
-        <p class="text-xs uppercase tracking-[0.3em] text-[#c8a882]">Audit</p>
-        <h1 class="mt-2 text-3xl font-semibold text-white">Audit Log</h1>
-      </header>
-
+    <section class="space-y-4">
       @if (errorMessage()) {
-        <div class="admin-panel px-6 py-4 text-sm text-red-300">{{ errorMessage() }}</div>
+        <div class="admin-panel px-6 py-4 text-sm text-red-300" role="alert" aria-live="assertive">{{ errorMessage() }}</div>
       }
 
-      <div class="admin-panel overflow-hidden">
-        <p-table [value]="entries()" [loading]="loading()" styleClass="admin-data-table" dataKey="id">
+      <div class="admin-panel overflow-x-auto">
+        <p-table
+          [value]="entries()"
+          [loading]="loading()"
+          styleClass="admin-data-table"
+          dataKey="id"
+          [paginator]="true"
+          [rows]="25"
+          [rowsPerPageOptions]="[25, 50, 100]"
+          [showCurrentPageReport]="true"
+          currentPageReportTemplate="共 {totalRecords} 筆，第 {first}–{last} 筆"
+        >
           <ng-template pTemplate="header">
             <tr>
               <th>時間</th>

@@ -1,4 +1,5 @@
 import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
 import { Component, OnInit, inject, signal } from '@angular/core';
 import { DiscographyService } from '../../core/services/discography.service';
 import { GoodsService } from '../../core/services/goods.service';
@@ -14,60 +15,59 @@ import { formatDateLabel } from '../shared/admin.utils';
 interface DashboardStat {
   label: string;
   count: number;
+  icon: string;
+  link: string;
 }
 
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, RouterModule],
   template: `
     <section class="space-y-6">
-      <header>
-        <p class="text-xs uppercase tracking-[0.3em] text-[#c8a882]">Overview</p>
-        <h1 class="mt-2 text-3xl font-semibold text-white">Dashboard</h1>
-      </header>
-
       @if (errorMessage()) {
-        <div class="admin-panel px-6 py-4 text-sm text-red-300">{{ errorMessage() }}</div>
+        <div class="admin-panel px-6 py-4 text-sm text-red-300" role="alert" aria-live="assertive">{{ errorMessage() }}</div>
       }
 
-      <div class="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+      <div class="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
         @for (stat of stats(); track stat.label) {
-          <article class="admin-panel p-6">
-            <p class="text-xs uppercase tracking-[0.25em] text-white/45">{{ stat.label }}</p>
+          <a
+            [routerLink]="stat.link"
+            class="admin-panel block cursor-pointer p-5 transition hover:border-accent/40 hover:shadow-lg"
+          >
+            <div class="flex items-start justify-between gap-2">
+              <p class="text-xs uppercase tracking-[0.2em] text-white/45">{{ stat.label }}</p>
+              <i [class]="'pi ' + stat.icon + ' text-sm text-accent/50'"></i>
+            </div>
             <p class="mt-4 text-4xl font-semibold text-white">{{ stat.count }}</p>
-          </article>
+          </a>
         }
       </div>
 
       <div class="admin-panel p-6">
-        <div class="flex items-center justify-between gap-4">
-          <div>
-            <p class="text-xs uppercase tracking-[0.25em] text-[#c8a882]">Activity</p>
-            <h2 class="mt-2 text-2xl font-semibold text-white">最近 10 筆版本操作</h2>
-          </div>
+        <div class="mb-4 flex items-center justify-between gap-4">
+          <h2 class="text-base font-semibold text-white">最近操作</h2>
           @if (loading()) {
-            <span class="text-sm text-white/55">載入中…</span>
+            <span class="text-xs text-white/45">載入中…</span>
           }
         </div>
 
-        <div class="mt-6 space-y-3">
+        <div class="divide-y divide-accent/10">
           @for (entry of recentVersions(); track entry.id) {
-            <div class="rounded-2xl border border-[#c8a882]/12 bg-black/20 px-4 py-4">
-              <div class="flex flex-wrap items-center justify-between gap-3">
-                <div>
-                  <p class="text-sm font-medium text-white">
-                    {{ entry.table_name }} / {{ entry.action }}
-                  </p>
-                  <p class="mt-1 text-xs text-white/55">
-                    {{ entry.changed_by_email || entry.changed_by || '未知使用者' }}
-                  </p>
-                </div>
+            <div class="flex items-center justify-between gap-4 py-3">
+              <div class="flex min-w-0 items-center gap-3">
+                <span class="shrink-0 rounded bg-accent/10 px-2 py-0.5 font-mono text-xs text-accent">
+                  {{ entry.action }}
+                </span>
+                <span class="truncate text-sm text-white">{{ entry.table_name }}</span>
+              </div>
+              <div class="shrink-0 text-right">
                 <p class="text-xs text-white/45">{{ formatLabel(entry.changed_at) }}</p>
+                <p class="text-xs text-white/30">{{ entry.changed_by_email || entry.changed_by || '未知' }}</p>
               </div>
             </div>
           } @empty {
-            <p class="text-sm text-white/55">目前沒有版本操作紀錄。</p>
+            <p class="py-6 text-center text-sm text-white/45">目前沒有版本操作紀錄。</p>
           }
         </div>
       </div>
@@ -118,17 +118,19 @@ export class DashboardComponent implements OnInit {
       ]);
 
       this.stats.set([
-        { label: 'Information', count: informationCount },
-        { label: 'Schedule', count: scheduleCount },
-        { label: 'Member', count: memberCount },
-        { label: 'Video', count: videoCount },
-        { label: 'Discography', count: discographyCount },
-        { label: 'Goods', count: goodsCount },
+        { label: 'Information', count: informationCount, icon: 'pi-info-circle', link: '/admin/information' },
+        { label: 'Schedule', count: scheduleCount, icon: 'pi-calendar', link: '/admin/schedule' },
+        { label: 'Member', count: memberCount, icon: 'pi-users', link: '/admin/member' },
+        { label: 'Video', count: videoCount, icon: 'pi-video', link: '/admin/video' },
+        { label: 'Discography', count: discographyCount, icon: 'pi-headphones', link: '/admin/discography' },
+        { label: 'Goods', count: goodsCount, icon: 'pi-shopping-cart', link: '/admin/goods' },
         {
           label: 'Rules / Pages',
           count: staticPages.filter(page => page.slug !== 'contact-info').length,
+          icon: 'pi-file',
+          link: '/admin/rules',
         },
-        { label: 'Contact Messages', count: messageCount },
+        { label: 'Contact Messages', count: messageCount, icon: 'pi-envelope', link: '/admin/contact' },
       ]);
       this.recentVersions.set(recentVersions);
     } catch (error) {

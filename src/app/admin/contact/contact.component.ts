@@ -1,4 +1,5 @@
 import { CommonModule } from '@angular/common';
+import { MessageService } from 'primeng/api';
 import { Component, OnInit, inject, signal } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ButtonModule } from 'primeng/button';
@@ -16,12 +17,7 @@ import { formatDateLabel } from '../shared/admin.utils';
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule, ButtonModule, TabsModule, TextareaModule, TableModule],
   template: `
-    <section class="space-y-6">
-      <header>
-        <p class="text-xs uppercase tracking-[0.3em] text-[#c8a882]">Contact</p>
-        <h1 class="mt-2 text-3xl font-semibold text-white">聯絡資訊與表單留言</h1>
-      </header>
-
+    <section class="space-y-4">
       <p-tabs value="info">
         <p-tablist>
           <p-tab value="info">聯絡資訊</p-tab>
@@ -39,7 +35,7 @@ import { formatDateLabel } from '../shared/admin.utils';
               ></textarea>
 
               @if (errorMessage()) {
-                <p class="mt-4 text-sm text-red-300">{{ errorMessage() }}</p>
+                <p class="mt-4 text-sm text-red-300" role="alert" aria-live="assertive">{{ errorMessage() }}</p>
               }
 
               <div class="mt-6">
@@ -55,7 +51,7 @@ import { formatDateLabel } from '../shared/admin.utils';
           </p-tabpanel>
 
           <p-tabpanel value="messages">
-            <div class="admin-panel overflow-hidden">
+            <div class="admin-panel overflow-x-auto">
               <p-table [value]="messages()" styleClass="admin-data-table" dataKey="id">
                 <ng-template pTemplate="header">
                   <tr>
@@ -84,6 +80,7 @@ import { formatDateLabel } from '../shared/admin.utils';
 export class ContactComponent implements OnInit {
   private readonly staticPageService = inject(StaticPageService);
   private readonly contactService = inject(ContactService);
+  private readonly messageService = inject(MessageService);
 
   private contactPage: StaticPage | null = null;
 
@@ -120,6 +117,11 @@ export class ContactComponent implements OnInit {
     try {
       this.contactPage = await this.staticPageService.update(this.contactPage.id, {
         content_rich_text: this.form.getRawValue().content_rich_text,
+      });
+      this.messageService.add({
+        severity: 'success',
+        summary: '儲存成功',
+        detail: '聯絡資訊已更新。',
       });
     } catch (error) {
       this.errorMessage.set(error instanceof Error ? error.message : '聯絡資訊儲存失敗。');

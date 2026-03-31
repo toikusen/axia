@@ -8,6 +8,7 @@ import { InputTextModule } from 'primeng/inputtext';
 import { SelectModule } from 'primeng/select';
 import { TextareaModule } from 'primeng/textarea';
 import { ToggleSwitchModule } from 'primeng/toggleswitch';
+import { MessageService } from 'primeng/api';
 import { AdminFormField, AdminResourceKey } from '../admin.types';
 import { markAllControlsTouched, tagsToInputValue } from '../admin.utils';
 import { ImageUploadComponent } from '../image-upload/image-upload.component';
@@ -32,15 +33,8 @@ import { getAdminResourceConfig } from '../resource-registry';
     JsonMapInputComponent,
   ],
   template: `
-    <section class="space-y-6">
-      <header class="flex flex-wrap items-end justify-between gap-4">
-        <div>
-          <p class="text-xs uppercase tracking-[0.3em] text-[#c8a882]">{{ config().title }}</p>
-          <h1 class="mt-2 text-3xl font-semibold text-white">
-            {{ isEditMode() ? '編輯' : '新增' }}{{ config().singularLabel }}
-          </h1>
-        </div>
-
+    <section class="space-y-4">
+      <div class="flex">
         <a
           pButton
           severity="secondary"
@@ -48,16 +42,22 @@ import { getAdminResourceConfig } from '../resource-registry';
           icon="pi pi-arrow-left"
           label="返回列表"
         ></a>
-      </header>
+      </div>
 
       <form class="admin-panel p-6" [formGroup]="form" (ngSubmit)="save()">
         <div class="grid gap-6 md:grid-cols-2">
           @for (field of config().fields; track field.key) {
-            <div [ngClass]="field.span === 1 ? 'md:col-span-1' : 'md:col-span-2'" class="space-y-3">
-              <label class="block text-sm font-medium text-white/90">
+            <div
+              [ngClass]="[
+                field.span === 1 ? 'md:col-span-1' : 'md:col-span-2',
+                field.type === 'toggle' ? 'flex items-center justify-between gap-4' : 'space-y-3'
+              ]"
+            >
+              <label [for]="'field-' + field.key" class="block text-sm font-medium text-white/90">
                 {{ field.label }}
                 @if (field.required) {
-                  <span class="text-[#c8a882]">*</span>
+                  <span class="text-accent" aria-hidden="true">*</span>
+                  <span class="sr-only">（必填）</span>
                 }
               </label>
 
@@ -66,6 +66,7 @@ import { getAdminResourceConfig } from '../resource-registry';
                   <input
                     pInputText
                     class="admin-input"
+                    [id]="'field-' + field.key"
                     [formControlName]="field.key"
                     [placeholder]="field.placeholder ?? ''"
                   />
@@ -74,6 +75,7 @@ import { getAdminResourceConfig } from '../resource-registry';
                   <textarea
                     pTextarea
                     class="admin-textarea"
+                    [id]="'field-' + field.key"
                     [rows]="field.rows ?? 6"
                     [formControlName]="field.key"
                     [placeholder]="field.placeholder ?? ''"
@@ -83,6 +85,7 @@ import { getAdminResourceConfig } from '../resource-registry';
                   <textarea
                     pTextarea
                     class="admin-textarea font-mono"
+                    [id]="'field-' + field.key"
                     [rows]="field.rows ?? 12"
                     [formControlName]="field.key"
                     [placeholder]="field.placeholder ?? '<p>支援 HTML 內容</p>'"
@@ -102,6 +105,7 @@ import { getAdminResourceConfig } from '../resource-registry';
                     [showIcon]="true"
                     [showTime]="true"
                     hourFormat="24"
+                    styleClass="w-full"
                     inputStyleClass="w-full"
                   ></p-datepicker>
                 }
@@ -110,6 +114,7 @@ import { getAdminResourceConfig } from '../resource-registry';
                     appendTo="body"
                     [formControlName]="field.key"
                     [showIcon]="true"
+                    styleClass="w-full"
                     inputStyleClass="w-full"
                   ></p-datepicker>
                 }
@@ -139,8 +144,9 @@ import { getAdminResourceConfig } from '../resource-registry';
                   <div class="flex items-center gap-3">
                     <input
                       type="color"
-                      class="h-12 w-16 rounded border border-[#c8a882]/20 bg-transparent"
-                      [formControlName]="field.key"
+                      class="h-10 w-14 cursor-pointer rounded border border-accent/20 bg-transparent"
+                      [value]="stringValue(field.key)"
+                      (input)="updateColor(field.key, $event)"
                     />
                     <input
                       pInputText
@@ -172,14 +178,14 @@ import { getAdminResourceConfig } from '../resource-registry';
               }
 
               @if (isInvalid(field)) {
-                <p class="text-xs text-red-300">{{ field.label }} 為必填欄位。</p>
+                <p class="text-xs text-red-300" role="alert">{{ field.label }} 為必填欄位。</p>
               }
             </div>
           }
         </div>
 
         @if (errorMessage()) {
-          <p class="mt-6 text-sm text-red-300">{{ errorMessage() }}</p>
+          <p class="mt-6 text-sm text-red-300" role="alert" aria-live="assertive">{{ errorMessage() }}</p>
         }
 
         <div class="mt-8 flex flex-wrap gap-3">
@@ -205,6 +211,7 @@ export class ResourceFormComponent implements OnInit {
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
   private readonly injector = inject(Injector);
+  private readonly messageService = inject(MessageService);
   private readonly resourceKey = this.route.snapshot.data['resourceKey'] as AdminResourceKey;
   private readonly recordId = this.route.snapshot.paramMap.get('id');
 
@@ -248,6 +255,12 @@ export class ResourceFormComponent implements OnInit {
     this.form.get(fieldKey)?.markAsDirty();
   }
 
+  protected updateColor(fieldKey: string, event: Event): void {
+    const input = event.target as HTMLInputElement;
+    this.form.get(fieldKey)?.setValue(input.value);
+    this.form.get(fieldKey)?.markAsDirty();
+  }
+
   protected updateTags(fieldKey: string, event: Event): void {
     const input = event.target as HTMLInputElement;
     this.form.get(fieldKey)?.setValue(input.value);
@@ -271,6 +284,12 @@ export class ResourceFormComponent implements OnInit {
       } else {
         await this.config().create(this.injector, payload);
       }
+
+      this.messageService.add({
+        severity: 'success',
+        summary: '儲存成功',
+        detail: `${this.config().singularLabel} 已儲存。`,
+      });
 
       await this.router.navigate([this.config().basePath]);
     } catch (error) {

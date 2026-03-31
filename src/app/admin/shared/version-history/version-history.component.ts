@@ -1,9 +1,11 @@
 import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges, inject, signal } from '@angular/core';
 import { ButtonModule } from 'primeng/button';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { DialogModule } from 'primeng/dialog';
 import { DividerModule } from 'primeng/divider';
 import { TagModule } from 'primeng/tag';
+import { ConfirmationService } from 'primeng/api';
 import { ContentVersion, VersionedTableName } from '../../../core/models/content-version.model';
 import { VersionService } from '../../../core/services/version.service';
 import { formatDateLabel } from '../admin.utils';
@@ -11,7 +13,8 @@ import { formatDateLabel } from '../admin.utils';
 @Component({
   selector: 'app-version-history',
   standalone: true,
-  imports: [CommonModule, ButtonModule, DialogModule, DividerModule, TagModule],
+  imports: [CommonModule, ButtonModule, ConfirmDialogModule, DialogModule, DividerModule, TagModule],
+  providers: [ConfirmationService],
   template: `
     <p-dialog
       [modal]="true"
@@ -21,6 +24,7 @@ import { formatDateLabel } from '../admin.utils';
       (visibleChange)="visibleChange.emit($event)"
       header="版本歷史"
     >
+      <p-confirmdialog></p-confirmdialog>
       <div class="space-y-4">
         @if (loading()) {
           <p class="text-sm text-white/60">版本資料載入中…</p>
@@ -54,9 +58,18 @@ import { formatDateLabel } from '../admin.utils';
               </div>
 
               <p-divider></p-divider>
-              <pre class="overflow-x-auto rounded-2xl bg-black/30 p-4 text-xs text-white/70">{{
-                toJson(version.version_data)
-              }}</pre>
+              <div class="overflow-x-auto rounded-xl bg-black/25 text-xs">
+                <table class="w-full">
+                  <tbody>
+                    @for (entry of toEntries(version.version_data); track entry.key) {
+                      <tr class="border-b border-white/5 last:border-0">
+                        <td class="w-40 shrink-0 px-4 py-2 font-mono text-white/40">{{ entry.key }}</td>
+                        <td class="break-all px-4 py-2 text-white/75">{{ entry.value }}</td>
+                      </tr>
+                    }
+                  </tbody>
+                </table>
+              </div>
             </div>
           }
         }
@@ -70,6 +83,7 @@ import { formatDateLabel } from '../admin.utils';
 })
 export class VersionHistoryComponent implements OnChanges {
   private readonly versionService = inject(VersionService);
+  private readonly confirmationService = inject(ConfirmationService);
 
   @Input({ required: true }) visible = false;
   @Input() tableName: VersionedTableName | null = null;
@@ -97,15 +111,27 @@ export class VersionHistoryComponent implements OnChanges {
     return formatDateLabel(value);
   }
 
-  protected toJson(value: Record<string, unknown>): string {
-    return JSON.stringify(value, null, 2);
+  protected toEntries(value: Record<string, unknown>): { key: string; value: string }[] {
+    return Object.entries(value).map(([k, v]) => ({
+      key: k,
+      value: v === null || v === undefined ? '—' : typeof v === 'object' ? JSON.stringify(v) : String(v),
+    }));
   }
 
-  protected async revertVersion(version: ContentVersion): Promise<void> {
-    if (!confirm('確定要將這筆資料還原到此版本嗎？')) {
-      return;
-    }
+  protected revertVersion(version: ContentVersion): void {
+    this.confirmationService.confirm({
+      message: '確定要將這筆資料還原到此版本嗎？',
+      header: '還原版本',
+      acceptLabel: '確定還原',
+      rejectLabel: '取消',
+      acceptButtonStyleClass: 'p-button-danger',
+      accept: () => {
+        void this.doRevert(version);
+      },
+    });
+  }
 
+  private async doRevert(version: ContentVersion): Promise<void> {
     this.errorMessage.set('');
     this.revertingVersionId.set(version.id);
 

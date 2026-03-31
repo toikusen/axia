@@ -1,107 +1,225 @@
 /* src/styles.css */
 @import 'primeicons/primeicons.css';
 
+/* Cascade layer order: tailwind-base < primeng < tailwind-utilities < unlayered */
+@layer tailwind-base, primeng, tailwind-utilities;
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-@layer base {
-  html {
-    background-color: theme('colors.bg.DEFAULT');
-    color: theme('colors.text-primary');
-  }
+/* ═══════════════════════════════════════════════════════════
+   Global base — outside any layer, wins over everything
+   ═══════════════════════════════════════════════════════════ */
 
-  @media (prefers-reduced-motion: no-preference) {
-    html { scroll-behavior: smooth; }
-  }
-
-  body {
-    font-family: 'Noto Sans TC', sans-serif;
-    min-height: 100dvh;
-    margin: 0;
-  }
-
-  ::selection {
-    background-color: theme('colors.accent.DEFAULT');
-    color: theme('colors.bg.DEFAULT');
-  }
-
-  /* 捲軸樣式 */
-  ::-webkit-scrollbar { width: 4px; }
-  ::-webkit-scrollbar-track { background: theme('colors.bg.DEFAULT'); }
-  ::-webkit-scrollbar-thumb { background: theme('colors.border.DEFAULT'); border-radius: 2px; }
-  ::-webkit-scrollbar-thumb:hover { background: theme('colors.accent.DEFAULT'); }
+html {
+  background-color: theme('colors.bg.DEFAULT');
+  color: theme('colors.text-primary');
 }
 
-@layer components {
-  .axia-logo {
-    @apply font-display tracking-widest2 text-text-primary;
-  }
-  .nav-link {
-    @apply text-text-secondary text-xs tracking-widest uppercase transition-colors duration-200 hover:text-accent;
-  }
-  .nav-link.active {
-    @apply text-accent border-b border-accent pb-0.5;
-  }
-  .section-label {
-    @apply text-accent text-xs tracking-widest uppercase;
-  }
-  .divider {
-    @apply border-t border-border my-8;
-  }
-  .card {
-    @apply bg-bg-secondary border border-border rounded-sm hover:border-accent/50 transition-colors duration-300;
-  }
-  .btn-primary {
-    @apply bg-transparent border border-accent text-accent text-xs tracking-widest uppercase px-6 py-2.5
-           hover:bg-accent hover:text-bg transition-all duration-200 cursor-pointer;
-  }
-
-  .admin-surface {
-    background:
-      radial-gradient(circle at top left, rgba(200, 168, 130, 0.12), transparent 30%),
-      linear-gradient(180deg, #171412 0%, #0f0d0b 100%);
-    color: #f5efe7;
-  }
-
-  .admin-panel {
-    background: rgba(34, 29, 24, 0.92);
-    border: 1px solid rgba(200, 168, 130, 0.18);
-    border-radius: 1rem;
-    box-shadow: 0 24px 60px rgba(0, 0, 0, 0.28);
-  }
-
-  .admin-input,
-  .admin-textarea {
-    width: 100%;
-  }
-
-  .admin-data-table table {
-    width: 100%;
-  }
-
-  .admin-data-table th,
-  .admin-data-table td {
-    border-bottom: 1px solid rgba(200, 168, 130, 0.12);
-    padding: 1rem 0.75rem;
-    text-align: left;
-    vertical-align: top;
-  }
-
-  .admin-data-table th {
-    color: #d9c2a8;
-    font-size: 0.75rem;
-    font-weight: 600;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-  }
-
-  .admin-prose {
-    color: #f5efe7;
-    line-height: 1.7;
-  }
-
-  .admin-prose a {
-    color: #d9c2a8;
-  }
+@media (prefers-reduced-motion: no-preference) {
+  html { scroll-behavior: smooth; }
 }
+
+body {
+  font-family: 'Noto Sans TC', sans-serif;
+  min-height: 100dvh;
+  margin: 0;
+}
+
+::selection {
+  background-color: theme('colors.accent.DEFAULT');
+  color: theme('colors.bg.DEFAULT');
+}
+
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: theme('colors.bg.DEFAULT'); }
+::-webkit-scrollbar-thumb { background: theme('colors.border.DEFAULT'); border-radius: 2px; }
+::-webkit-scrollbar-thumb:hover { background: theme('colors.accent.DEFAULT'); }
+
+/* ═══════════════════════════════════════════════════════════
+   Frontend design system
+   ═══════════════════════════════════════════════════════════ */
+
+.axia-logo {
+  @apply font-display tracking-widest2 text-text-primary;
+}
+.nav-link {
+  @apply text-text-secondary text-xs tracking-widest uppercase transition-colors duration-200 hover:text-accent;
+}
+.nav-link.active {
+  @apply text-accent border-b border-accent pb-0.5;
+}
+.section-label {
+  @apply text-accent text-xs tracking-widest uppercase;
+}
+.divider {
+  @apply border-t border-border my-8;
+}
+.card {
+  @apply bg-bg-secondary border border-border rounded-sm hover:border-accent/50 transition-colors duration-300;
+}
+.btn-primary {
+  @apply bg-transparent border border-accent text-accent text-xs tracking-widest uppercase px-6 py-2.5
+         hover:bg-accent hover:text-bg transition-all duration-200 cursor-pointer;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   Admin — Design Tokens (CSS custom properties)
+   ═══════════════════════════════════════════════════════════ */
+
+:root {
+  --admin-accent:        #c8a882;
+  --admin-accent-subtle: rgba(200, 168, 130, 0.10);
+  --admin-accent-border: rgba(200, 168, 130, 0.18);
+  --admin-accent-dim:    rgba(200, 168, 130, 0.06);
+  --admin-bg-dark:       #171412;
+  --admin-bg-panel:      rgba(34, 29, 24, 0.92);
+  --admin-bg-deep:       #1d1915;
+  --admin-bg-dialog:     #221d18;
+  --admin-text:          #f5efe7;
+  --admin-text-muted:    rgba(245, 239, 231, 0.28);
+}
+
+/* ═══════════════════════════════════════════════════════════
+   Admin — Layout Shells
+   ═══════════════════════════════════════════════════════════ */
+
+.admin-surface {
+  background:
+    radial-gradient(circle at top left, rgba(200, 168, 130, 0.12), transparent 30%),
+    linear-gradient(180deg, var(--admin-bg-dark) 0%, #0f0d0b 100%);
+  color: var(--admin-text);
+}
+
+.admin-panel {
+  background: var(--admin-bg-panel);
+  border: 1px solid var(--admin-accent-border);
+  border-radius: 1rem;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.28);
+}
+
+/* ═══════════════════════════════════════════════════════════
+   Admin — Table
+   ═══════════════════════════════════════════════════════════ */
+
+.admin-data-table table { width: 100%; }
+
+.admin-data-table th,
+.admin-data-table td {
+  border-bottom: 1px solid rgba(200, 168, 130, 0.10);
+  padding: 0.9rem 1.1rem;
+  text-align: left;
+  vertical-align: middle;
+}
+
+.admin-data-table th {
+  background: var(--admin-accent-dim);
+  color: var(--admin-accent);
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.admin-data-table tbody tr { transition: background 0.12s; }
+
+.admin-data-table tbody tr:hover td {
+  background: rgba(200, 168, 130, 0.045);
+}
+
+/* ═══════════════════════════════════════════════════════════
+   Admin — PrimeNG Component Overrides
+   These are outside all layers so they win over PrimeNG's
+   layered CSS regardless of specificity.
+   ═══════════════════════════════════════════════════════════ */
+
+/* ── Text inputs, textareas, and p-password inner input ──── */
+input.p-inputtext,
+textarea.p-inputtext,
+.p-password input {
+  background: rgba(255, 255, 255, 0.035) !important;
+  border: 1px solid rgba(200, 168, 130, 0.48) !important;
+  border-radius: 0.5rem !important;
+  color: var(--admin-text) !important;
+  font-family: 'Noto Sans TC', sans-serif !important;
+  font-size: 0.875rem !important;
+  padding: 0.625rem 0.875rem !important;
+  width: 100% !important;
+  outline: none !important;
+  transition: border-color 0.15s, box-shadow 0.15s !important;
+}
+
+input.p-inputtext:focus,
+textarea.p-inputtext:focus,
+.p-password input:focus {
+  border-color: var(--admin-accent) !important;
+  box-shadow: 0 0 0 3px rgba(200, 168, 130, 0.12) !important;
+}
+
+input.p-inputtext::placeholder,
+textarea.p-inputtext::placeholder,
+.p-password input::placeholder {
+  color: var(--admin-text-muted) !important;
+}
+
+input.p-inputtext:disabled,
+textarea.p-inputtext:disabled,
+.p-password input:disabled {
+  opacity: 0.45 !important;
+}
+
+/* ── Button disabled state ───────────────────────────────── */
+.p-button:disabled,
+.p-button.p-disabled {
+  opacity: 0.45 !important;
+  cursor: not-allowed !important;
+}
+
+/* ── Admin login button ──────────────────────────────────── */
+.admin-btn-primary {
+  background: var(--admin-accent) !important;
+  border-color: var(--admin-accent) !important;
+  color: var(--admin-bg-dark) !important;
+  font-weight: 600 !important;
+  width: 100%;
+  justify-content: center;
+}
+
+/* DatePicker panel — ensure opaque, high z-index, on-brand */
+.p-datepicker-panel {
+  background: var(--admin-bg-deep) !important;
+  border: 1px solid rgba(200, 168, 130, 0.28) !important;
+  border-radius: 0.875rem !important;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.55) !important;
+  z-index: 9000 !important;
+}
+
+/* Ensure datepicker container fills its form field */
+.p-datepicker { width: 100%; }
+
+/* ConfirmDialog */
+.p-confirmdialog .p-dialog {
+  background: var(--admin-bg-dialog);
+  border: 1px solid rgba(200, 168, 130, 0.22);
+  border-radius: 1rem;
+}
+
+/* Select panel */
+.p-select-overlay {
+  background: var(--admin-bg-deep);
+  border: 1px solid rgba(200, 168, 130, 0.25);
+  border-radius: 0.75rem;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.50);
+}
+
+/* ═══════════════════════════════════════════════════════════
+   Admin — Prose
+   ═══════════════════════════════════════════════════════════ */
+
+.admin-prose {
+  color: var(--admin-text);
+  line-height: 1.7;
+}
+.admin-prose a { color: #d9c2a8; }

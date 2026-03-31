@@ -1,4 +1,5 @@
 import { CommonModule } from '@angular/common';
+import { MessageService } from 'primeng/api';
 import { Component, OnInit, inject, signal } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { ButtonModule } from 'primeng/button';
@@ -13,12 +14,7 @@ import { JsonMapInputComponent } from '../shared/json-map-input/json-map-input.c
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule, ButtonModule, ImageUploadComponent, JsonMapInputComponent],
   template: `
-    <section class="space-y-6">
-      <header>
-        <p class="text-xs uppercase tracking-[0.3em] text-[#c8a882]">Home</p>
-        <h1 class="mt-2 text-3xl font-semibold text-white">首頁設定</h1>
-      </header>
-
+    <section class="space-y-4">
       <form class="admin-panel p-6" [formGroup]="form" (ngSubmit)="save()">
         <div class="grid gap-6 md:grid-cols-2">
           <div class="space-y-3 md:col-span-2">
@@ -37,7 +33,7 @@ import { JsonMapInputComponent } from '../shared/json-map-input/json-map-input.c
         </div>
 
         @if (errorMessage()) {
-          <p class="mt-6 text-sm text-red-300">{{ errorMessage() }}</p>
+          <p class="mt-6 text-sm text-red-300" role="alert" aria-live="assertive">{{ errorMessage() }}</p>
         }
 
         <div class="mt-8">
@@ -55,6 +51,7 @@ import { JsonMapInputComponent } from '../shared/json-map-input/json-map-input.c
 })
 export class HomeSettingsComponent implements OnInit {
   private readonly homeSettingsService = inject(HomeSettingsService);
+  private readonly messageService = inject(MessageService);
   private settings: HomeSettings | null = null;
 
   protected readonly settingsId = signal('');
@@ -94,6 +91,11 @@ export class HomeSettingsComponent implements OnInit {
       this.settings = await this.homeSettingsService.update(this.settings.id, {
         hero_image_url: this.heroImageUrl() || null,
         sns_links: sanitizeStringMap(this.form.getRawValue().sns_links),
+      });
+      this.messageService.add({
+        severity: 'success',
+        summary: '儲存成功',
+        detail: '首頁設定已更新。',
       });
     } catch (error) {
       this.errorMessage.set(error instanceof Error ? error.message : '首頁設定儲存失敗。');

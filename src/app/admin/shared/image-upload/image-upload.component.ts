@@ -9,18 +9,18 @@ import { StorageService } from '../../../core/services/storage.service';
   standalone: true,
   imports: [CommonModule, ButtonModule, ProgressSpinnerModule],
   template: `
-    <div class="admin-panel p-4 space-y-4">
+    <div class="space-y-3">
       <div
-        class="flex min-h-48 items-center justify-center overflow-hidden rounded-2xl border border-dashed border-[#c8a882]/25 bg-black/20"
+        class="flex min-h-32 items-center justify-center overflow-hidden rounded-lg border border-dashed border-accent/25 bg-black/20"
       >
         @if (imageUrl) {
-          <img [src]="imageUrl" alt="Preview" class="max-h-60 w-full object-cover" />
+          <img [src]="imageUrl" [alt]="altText" class="max-h-48 w-full object-cover" />
         } @else {
-          <p class="text-sm text-white/50">尚未上傳圖片</p>
+          <p class="text-sm text-white/40">尚未上傳圖片</p>
         }
       </div>
 
-      <div class="flex flex-wrap gap-3">
+      <div class="flex flex-wrap gap-2">
         <input
           #fileInput
           type="file"
@@ -31,6 +31,7 @@ import { StorageService } from '../../../core/services/storage.service';
         <button
           pButton
           type="button"
+          size="small"
           icon="pi pi-upload"
           label="選擇圖片"
           [disabled]="uploading()"
@@ -39,6 +40,7 @@ import { StorageService } from '../../../core/services/storage.service';
         <button
           pButton
           type="button"
+          size="small"
           severity="secondary"
           icon="pi pi-times"
           label="清除"
@@ -48,18 +50,14 @@ import { StorageService } from '../../../core/services/storage.service';
       </div>
 
       @if (uploading()) {
-        <div class="flex items-center gap-3 text-sm text-white/70">
-          <p-progressspinner
-            strokeWidth="5"
-            styleClass="h-8 w-8"
-            ariaLabel="上傳中"
-          ></p-progressspinner>
-          <span>圖片上傳中…</span>
+        <div class="flex items-center gap-2 text-sm text-white/60">
+          <p-progressspinner strokeWidth="5" styleClass="h-5 w-5" ariaLabel="上傳中"></p-progressspinner>
+          <span>上傳中…</span>
         </div>
       }
 
       @if (errorMessage()) {
-        <p class="text-sm text-red-300">{{ errorMessage() }}</p>
+        <p class="text-xs text-red-300">{{ errorMessage() }}</p>
       }
     </div>
   `,
@@ -69,6 +67,7 @@ export class ImageUploadComponent {
 
   @Input() imageUrl = '';
   @Input() uploadFolder = 'misc';
+  @Input() altText = '已上傳的圖片預覽';
   @Output() imageUrlChange = new EventEmitter<string>();
 
   protected readonly uploading = signal(false);

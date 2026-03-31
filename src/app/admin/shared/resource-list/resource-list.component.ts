@@ -24,24 +24,14 @@ import { VersionHistoryComponent } from '../version-history/version-history.comp
   template: `
     <p-confirmdialog></p-confirmdialog>
 
-    <section class="space-y-6">
-      <header class="flex flex-wrap items-end justify-between gap-4">
-        <div>
-          <p class="text-xs uppercase tracking-[0.3em] text-[#c8a882]">{{ config().title }}</p>
-          <h1 class="mt-2 text-3xl font-semibold text-white">{{ config().singularLabel }}管理</h1>
-        </div>
+    <section class="space-y-4">
+      <div class="flex justify-end">
+        <a pButton [routerLink]="['new']" icon="pi pi-plus" label="新增"></a>
+      </div>
 
-        <a
-          pButton
-          [routerLink]="['new']"
-          icon="pi pi-plus"
-          label="新增"
-        ></a>
-      </header>
-
-      <div class="admin-panel overflow-hidden">
+      <div class="admin-panel overflow-x-auto">
         @if (errorMessage()) {
-          <div class="border-b border-[#c8a882]/10 px-6 py-4 text-sm text-red-300">
+          <div class="border-b border-accent/10 px-6 py-4 text-sm text-red-300" role="alert" aria-live="assertive">
             {{ errorMessage() }}
           </div>
         }
@@ -57,7 +47,7 @@ import { VersionHistoryComponent } from '../version-history/version-history.comp
               @for (column of config().columns; track column.header) {
                 <th>{{ column.header }}</th>
               }
-              <th class="w-48">操作</th>
+              <th class="w-36">操作</th>
             </tr>
           </ng-template>
 
@@ -67,13 +57,15 @@ import { VersionHistoryComponent } from '../version-history/version-history.comp
                 <td>{{ getCellValue(item, column.key, column.render) }}</td>
               }
               <td>
-                <div class="flex flex-wrap gap-2">
+                <div class="flex gap-1">
                   <a
                     pButton
                     [routerLink]="[item.id]"
                     severity="secondary"
                     icon="pi pi-pencil"
                     text
+                    aria-label="編輯"
+                    class="!min-h-[44px] !min-w-[44px]"
                   ></a>
                   <button
                     pButton
@@ -81,6 +73,8 @@ import { VersionHistoryComponent } from '../version-history/version-history.comp
                     severity="secondary"
                     icon="pi pi-history"
                     text
+                    aria-label="版本歷史"
+                    class="!min-h-[44px] !min-w-[44px]"
                     (click)="openHistory(recordId(item))"
                   ></button>
                   <button
@@ -89,6 +83,8 @@ import { VersionHistoryComponent } from '../version-history/version-history.comp
                     severity="danger"
                     icon="pi pi-trash"
                     text
+                    aria-label="刪除"
+                    class="!min-h-[44px] !min-w-[44px]"
                     (click)="confirmDelete(recordId(item))"
                   ></button>
                 </div>
