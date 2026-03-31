@@ -24,7 +24,7 @@ import { formatDateLabel } from '../admin.utils';
       (visibleChange)="visibleChange.emit($event)"
       header="版本歷史"
     >
-      <p-confirmdialog></p-confirmdialog>
+      <p-confirmdialog [style]="{ zIndex: 10000 }"></p-confirmdialog>
       <div class="space-y-4">
         @if (loading()) {
           <p class="text-sm text-white/60">版本資料載入中…</p>
@@ -50,7 +50,7 @@ import { formatDateLabel } from '../admin.utils';
                   pButton
                   type="button"
                   severity="secondary"
-                  label="Revert"
+                  label="還原"
                   icon="pi pi-history"
                   [disabled]="revertingVersionId() === version.id"
                   (click)="revertVersion(version)"

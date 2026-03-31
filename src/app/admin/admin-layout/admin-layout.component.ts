@@ -19,6 +19,10 @@ interface AdminNavItem {
   imports: [CommonModule, RouterModule, RouterOutlet, ButtonModule, ToastModule],
   template: `
     <div class="admin-surface min-h-screen">
+      <a
+        href="#main-content"
+        class="sr-only focus:not-sr-only focus:fixed focus:left-2 focus:top-2 focus:z-50 focus:rounded-lg focus:bg-accent focus:px-4 focus:py-2 focus:text-sm focus:font-semibold focus:text-bg-admin-dark"
+      >跳至主要內容</a>
       <p-toast position="bottom-right" [life]="3500"></p-toast>
 
       @if (sidebarOpen()) {
@@ -41,7 +45,7 @@ interface AdminNavItem {
         >
           <div>
             <p class="text-xs uppercase tracking-[0.35em] text-accent">AXIA</p>
-            <h1 class="mt-3 text-2xl font-semibold text-white">Admin Console</h1>
+            <h1 class="mt-3 text-2xl font-semibold text-white">後台管理</h1>
           </div>
 
           <nav #sidebarNav class="space-y-1">
@@ -76,14 +80,14 @@ interface AdminNavItem {
           <header class="admin-panel flex flex-wrap items-center justify-between gap-4 px-6 py-5">
             <div class="flex items-center gap-4">
               <button
-                class="inline-flex items-center justify-center rounded-lg p-2 text-white/60 transition hover:bg-white/5 hover:text-white lg:hidden"
+                class="inline-flex min-h-[44px] min-w-[44px] items-center justify-center rounded-lg text-white/60 transition hover:bg-white/5 hover:text-white lg:hidden"
                 (click)="openSidebar()"
                 aria-label="開啟選單"
               >
                 <i class="pi pi-bars text-lg"></i>
               </button>
               <div>
-                <p class="text-xs uppercase tracking-[0.3em] text-accent">Current View</p>
+                <p class="text-xs uppercase tracking-[0.3em] text-accent">目前頁面</p>
                 <h2 class="mt-1 text-2xl font-semibold text-white">{{ pageTitle() }}</h2>
               </div>
             </div>
@@ -93,7 +97,7 @@ interface AdminNavItem {
             </div>
           </header>
 
-          <main class="pb-10">
+          <main id="main-content" class="pb-10">
             <router-outlet></router-outlet>
           </main>
         </div>
