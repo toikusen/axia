@@ -35,6 +35,7 @@ interface AdminNavItem {
       <div class="mx-auto grid min-h-screen max-w-[1600px] gap-6 p-4 lg:grid-cols-[240px_minmax(0,1fr)] lg:p-6">
 
         <aside
+          aria-label="主要導覽"
           class="admin-panel flex flex-col gap-6 p-6
                  fixed inset-y-0 left-0 z-30 w-64 overflow-y-auto
                  transition-transform duration-300
@@ -147,7 +148,7 @@ export class AdminLayoutComponent implements OnInit, OnDestroy {
       startWith(null),
       map(() => this.resolveTitle())
     ),
-    { initialValue: 'Dashboard' }
+    { initialValue: '總覽' }
   );
 
   protected readonly pageTitle = computed(() => this.routeTitle());
