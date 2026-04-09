@@ -145,7 +145,7 @@ export function getAdminResourceConfig(resourceKey: AdminResourceKey): AdminReso
         { key: 'event_date', label: '活動時間', type: 'datetime', required: true },
         { key: 'venue', label: '場地', type: 'text', required: true },
         { key: 'ticket_url', label: '購票連結', type: 'text' },
-        { key: 'notes', label: '備註', type: 'textarea', span: 2, rows: 6 },
+        { key: 'notes', label: '備註', type: 'richtext', span: 2, rows: 6 },
       ],
       emptyValue: () => ({
         event_name: '',
@@ -192,7 +192,7 @@ export function getAdminResourceConfig(resourceKey: AdminResourceKey): AdminReso
         },
         { key: 'color_hex', label: '代表色', type: 'color' },
         { key: 'sort_order', label: '排序', type: 'number', step: '1' },
-        { key: 'bio', label: '簡介', type: 'textarea', span: 2, rows: 8 },
+        { key: 'bio', label: '簡介', type: 'richtext', span: 2, rows: 8 },
         {
           key: 'sns_links',
           label: 'SNS Links',
@@ -255,7 +255,7 @@ export function getAdminResourceConfig(resourceKey: AdminResourceKey): AdminReso
         },
         { key: 'published_at', label: '發布時間', type: 'datetime', required: true },
         { key: 'is_featured', label: '首頁精選', type: 'toggle' },
-        { key: 'description', label: '描述', type: 'textarea', span: 2, rows: 6 },
+        { key: 'description', label: '描述', type: 'richtext', span: 2, rows: 6 },
       ],
       emptyValue: () => ({
         title: '',
@@ -376,7 +376,7 @@ export function getAdminResourceConfig(resourceKey: AdminResourceKey): AdminReso
         { key: 'purchase_url', label: '購買連結', type: 'text' },
         { key: 'is_sold_out', label: '已售完', type: 'toggle' },
         { key: 'sort_order', label: '排序', type: 'number', step: '1' },
-        { key: 'description', label: '描述', type: 'textarea', span: 2, rows: 6 },
+        { key: 'description', label: '描述', type: 'richtext', span: 2, rows: 6 },
       ],
       emptyValue: () => ({
         name: '',
