@@ -43,3 +43,7 @@ Thumbs.db
 
 # Git worktrees
 axia.worktrees/
+
+# Tool directories
+.playwright-mcp/
+.superpowers/

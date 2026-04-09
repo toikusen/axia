@@ -9,6 +9,7 @@ module.exports = {
           DEFAULT: '#222428',
           secondary: '#2a2c32',
           card: '#262830',
+          'admin-dark': '#171412',
         },
         border: {
           DEFAULT: '#3a3c42',
