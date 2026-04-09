@@ -32,6 +32,32 @@ export class AuthService {
     return data.session;
   }
 
+  async signInWithGoogle(): Promise<void> {
+    const { error } = await supabase.auth.signInWithOAuth({
+      provider: 'google',
+      options: {
+        redirectTo: `${window.location.origin}/admin/login`,
+      },
+    });
+
+    if (error) {
+      throw error;
+    }
+  }
+
+  async isAdminWhitelisted(): Promise<boolean> {
+    const user = this.currentUser();
+    if (!user?.email) return false;
+
+    const { data } = await supabase
+      .from('admin_whitelist')
+      .select('email')
+      .eq('email', user.email)
+      .maybeSingle();
+
+    return data !== null;
+  }
+
   async signOut(): Promise<void> {
     const { error } = await supabase.auth.signOut();
 
