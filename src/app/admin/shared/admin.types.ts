@@ -12,7 +12,6 @@ export type AdminResourceKey =
 
 export type AdminFieldType =
   | 'text'
-  | 'textarea'
   | 'richtext'
   | 'image'
   | 'datetime'
