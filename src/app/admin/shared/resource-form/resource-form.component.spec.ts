@@ -33,7 +33,7 @@ describe('ResourceFormComponent — richtext rendering', () => {
   });
 
   it('should not render a plain textarea for any field', () => {
-    const textareas = fixture.nativeElement.querySelectorAll('textarea.admin-textarea');
+    const textareas = fixture.nativeElement.querySelectorAll('textarea:not(.ql-editor)');
     expect(textareas.length).toBe(0);
   });
 });
