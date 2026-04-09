@@ -4,6 +4,7 @@ import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { ButtonModule } from 'primeng/button';
 import { DatePickerModule } from 'primeng/datepicker';
+import { EditorModule } from 'primeng/editor';
 import { InputTextModule } from 'primeng/inputtext';
 import { SelectModule } from 'primeng/select';
 import { TextareaModule } from 'primeng/textarea';
@@ -25,6 +26,7 @@ import { getAdminResourceConfig } from '../resource-registry';
     RouterModule,
     ButtonModule,
     DatePickerModule,
+    EditorModule,
     InputTextModule,
     SelectModule,
     TextareaModule,
@@ -72,24 +74,80 @@ import { getAdminResourceConfig } from '../resource-registry';
                   />
                 }
                 @case ('textarea') {
-                  <textarea
-                    pTextarea
-                    class="admin-textarea"
-                    [id]="'field-' + field.key"
-                    [rows]="field.rows ?? 6"
+                  <p-editor
                     [formControlName]="field.key"
-                    [placeholder]="field.placeholder ?? ''"
-                  ></textarea>
+                    [style]="{ height: (field.rows ?? 6) * 28 + 'px' }"
+                    styleClass="w-full"
+                  >
+                    <ng-template pTemplate="header">
+                      <span class="ql-formats">
+                        <select class="ql-header">
+                          <option value="1">H1</option>
+                          <option value="2">H2</option>
+                          <option value="3">H3</option>
+                          <option selected>Normal</option>
+                        </select>
+                      </span>
+                      <span class="ql-formats">
+                        <button class="ql-bold" type="button"></button>
+                        <button class="ql-italic" type="button"></button>
+                        <button class="ql-underline" type="button"></button>
+                        <button class="ql-strike" type="button"></button>
+                      </span>
+                      <span class="ql-formats">
+                        <button class="ql-list" value="ordered" type="button"></button>
+                        <button class="ql-list" value="bullet" type="button"></button>
+                      </span>
+                      <span class="ql-formats">
+                        <button class="ql-blockquote" type="button"></button>
+                        <button class="ql-link" type="button"></button>
+                      </span>
+                      <span class="ql-formats">
+                        <select class="ql-align"></select>
+                      </span>
+                      <span class="ql-formats">
+                        <button class="ql-clean" type="button"></button>
+                      </span>
+                    </ng-template>
+                  </p-editor>
                 }
                 @case ('richtext') {
-                  <textarea
-                    pTextarea
-                    class="admin-textarea font-mono"
-                    [id]="'field-' + field.key"
-                    [rows]="field.rows ?? 12"
+                  <p-editor
                     [formControlName]="field.key"
-                    [placeholder]="field.placeholder ?? '<p>支援 HTML 內容</p>'"
-                  ></textarea>
+                    [style]="{ height: (field.rows ?? 6) * 28 + 'px' }"
+                    styleClass="w-full"
+                  >
+                    <ng-template pTemplate="header">
+                      <span class="ql-formats">
+                        <select class="ql-header">
+                          <option value="1">H1</option>
+                          <option value="2">H2</option>
+                          <option value="3">H3</option>
+                          <option selected>Normal</option>
+                        </select>
+                      </span>
+                      <span class="ql-formats">
+                        <button class="ql-bold" type="button"></button>
+                        <button class="ql-italic" type="button"></button>
+                        <button class="ql-underline" type="button"></button>
+                        <button class="ql-strike" type="button"></button>
+                      </span>
+                      <span class="ql-formats">
+                        <button class="ql-list" value="ordered" type="button"></button>
+                        <button class="ql-list" value="bullet" type="button"></button>
+                      </span>
+                      <span class="ql-formats">
+                        <button class="ql-blockquote" type="button"></button>
+                        <button class="ql-link" type="button"></button>
+                      </span>
+                      <span class="ql-formats">
+                        <select class="ql-align"></select>
+                      </span>
+                      <span class="ql-formats">
+                        <button class="ql-clean" type="button"></button>
+                      </span>
+                    </ng-template>
+                  </p-editor>
                 }
                 @case ('image') {
                   <app-image-upload
@@ -167,10 +225,6 @@ import { getAdminResourceConfig } from '../resource-registry';
                 @case ('json') {
                   <app-json-map-input [formControlName]="field.key"></app-json-map-input>
                 }
-              }
-
-              @if (field.type === 'richtext') {
-                <p class="text-xs text-white/45">目前以 HTML 文字編輯模式輸入，後續可切換為 Quill 富文字編輯器。</p>
               }
 
               @if (field.description) {
