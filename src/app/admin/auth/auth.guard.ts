@@ -12,5 +12,12 @@ export const authGuard: CanActivateFn = async () => {
     return false;
   }
 
+  const allowed = await auth.isAdminWhitelisted();
+  if (!allowed) {
+    await auth.signOut();
+    await router.navigate(['/admin/login'], { queryParams: { error: 'unauthorized' } });
+    return false;
+  }
+
   return true;
 };
