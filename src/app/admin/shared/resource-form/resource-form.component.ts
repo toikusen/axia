@@ -7,7 +7,6 @@ import { DatePickerModule } from 'primeng/datepicker';
 import { EditorModule } from 'primeng/editor';
 import { InputTextModule } from 'primeng/inputtext';
 import { SelectModule } from 'primeng/select';
-import { TextareaModule } from 'primeng/textarea';
 import { ToggleSwitchModule } from 'primeng/toggleswitch';
 import { MessageService } from 'primeng/api';
 import { AdminFormField, AdminResourceKey } from '../admin.types';
@@ -29,7 +28,6 @@ import { getAdminResourceConfig } from '../resource-registry';
     EditorModule,
     InputTextModule,
     SelectModule,
-    TextareaModule,
     ToggleSwitchModule,
     ImageUploadComponent,
     JsonMapInputComponent,
@@ -73,47 +71,11 @@ import { getAdminResourceConfig } from '../resource-registry';
                     [placeholder]="field.placeholder ?? ''"
                   />
                 }
-                @case ('textarea') {
-                  <p-editor
-                    [formControlName]="field.key"
-                    [style]="{ height: (field.rows ?? 6) * 28 + 'px' }"
-                    styleClass="w-full"
-                  >
-                    <ng-template pTemplate="header">
-                      <span class="ql-formats">
-                        <select class="ql-header">
-                          <option value="1">H1</option>
-                          <option value="2">H2</option>
-                          <option value="3">H3</option>
-                          <option selected>Normal</option>
-                        </select>
-                      </span>
-                      <span class="ql-formats">
-                        <button class="ql-bold" type="button"></button>
-                        <button class="ql-italic" type="button"></button>
-                        <button class="ql-underline" type="button"></button>
-                        <button class="ql-strike" type="button"></button>
-                      </span>
-                      <span class="ql-formats">
-                        <button class="ql-list" value="ordered" type="button"></button>
-                        <button class="ql-list" value="bullet" type="button"></button>
-                      </span>
-                      <span class="ql-formats">
-                        <button class="ql-blockquote" type="button"></button>
-                        <button class="ql-link" type="button"></button>
-                      </span>
-                      <span class="ql-formats">
-                        <select class="ql-align"></select>
-                      </span>
-                      <span class="ql-formats">
-                        <button class="ql-clean" type="button"></button>
-                      </span>
-                    </ng-template>
-                  </p-editor>
-                }
                 @case ('richtext') {
                   <p-editor
                     [formControlName]="field.key"
+                    [id]="'field-' + field.key"
+                    [placeholder]="field.placeholder ?? ''"
                     [style]="{ height: (field.rows ?? 6) * 28 + 'px' }"
                     styleClass="w-full"
                   >
