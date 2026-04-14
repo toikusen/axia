@@ -34,7 +34,7 @@ import { StaticPage } from '../../core/models/static-page.model';
       @if (currentPage()) {
         <div>
           <h1 class="font-display text-2xl text-text-primary mb-8">{{ currentPage()!.title }}</h1>
-          <div class="prose-axia" [innerHTML]="safeContent()"></div>
+          <div class="prose-axia prose-axia-muted" [innerHTML]="safeContent()"></div>
         </div>
       } @else if (pages().length === 0) {
         <p class="text-text-secondary text-sm">目前沒有規則頁面。</p>
@@ -43,11 +43,6 @@ import { StaticPage } from '../../core/models/static-page.model';
       }
     </div>
   `,
-  styles: [`
-    .prose-axia :is(p, li) { color: #6a6870; line-height: 1.8; margin-bottom: 1em; font-size: 0.875rem; }
-    .prose-axia h2 { color: #c8a882; font-size: 1rem; font-family: Georgia, serif; letter-spacing: 0.1em; margin: 2em 0 0.75em; }
-    .prose-axia ul { padding-left: 1.25rem; list-style-type: disc; }
-  `]
 })
 export class RulesComponent implements OnInit {
   pages = signal<StaticPage[]>([]);

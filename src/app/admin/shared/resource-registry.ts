@@ -56,7 +56,7 @@ export function getAdminResourceConfig(resourceKey: AdminResourceKey): AdminReso
       basePath: '/admin/information',
       columns: [
         { header: '標題', key: 'title' },
-        { header: '狀態', key: 'status' },
+        { header: '狀態', render: item => item['status'] === 'published' ? '已發布' : '草稿' },
         {
           header: '發布時間',
           render: item => formatDateLabel(item['published_at']),
@@ -92,8 +92,8 @@ export function getAdminResourceConfig(resourceKey: AdminResourceKey): AdminReso
           type: 'select',
           required: true,
           options: [
-            { label: 'Draft', value: 'draft' },
-            { label: 'Published', value: 'published' },
+            { label: '草稿', value: 'draft' },
+            { label: '已發布', value: 'published' },
           ],
         },
         { key: 'published_at', label: '發布時間', type: 'datetime' },
@@ -195,7 +195,7 @@ export function getAdminResourceConfig(resourceKey: AdminResourceKey): AdminReso
         { key: 'bio', label: '簡介', type: 'richtext', span: 2, rows: 8 },
         {
           key: 'sns_links',
-          label: 'SNS Links',
+          label: '社群連結',
           type: 'json',
           span: 2,
         },
@@ -237,7 +237,7 @@ export function getAdminResourceConfig(resourceKey: AdminResourceKey): AdminReso
         { header: '標題', key: 'title' },
         {
           header: '精選',
-          render: item => (item['is_featured'] ? 'Yes' : 'No'),
+          render: item => (item['is_featured'] ? '是' : '否'),
         },
         {
           header: '發布時間',
@@ -313,9 +313,9 @@ export function getAdminResourceConfig(resourceKey: AdminResourceKey): AdminReso
           type: 'select',
           required: true,
           options: [
-            { label: 'Single', value: 'single' },
+            { label: '單曲', value: 'single' },
             { label: 'EP', value: 'ep' },
-            { label: 'Album', value: 'album' },
+            { label: '專輯', value: 'album' },
           ],
         },
         {
@@ -361,7 +361,7 @@ export function getAdminResourceConfig(resourceKey: AdminResourceKey): AdminReso
         { header: '名稱', key: 'name' },
         {
           header: '售罄',
-          render: item => (item['is_sold_out'] ? 'Yes' : 'No'),
+          render: item => (item['is_sold_out'] ? '是' : '否'),
         },
         { header: '排序', render: item => String(item['sort_order'] ?? 0) },
       ],
@@ -411,12 +411,12 @@ export function getAdminResourceConfig(resourceKey: AdminResourceKey): AdminReso
       singularLabel: '規則頁面',
       basePath: '/admin/rules',
       columns: [
-        { header: 'Slug', key: 'slug' },
+        { header: '頁面代稱', key: 'slug' },
         { header: '標題', key: 'title' },
         { header: '排序', render: item => String(item['sort_order'] ?? 0) },
       ],
       fields: [
-        { key: 'slug', label: 'Slug', type: 'text', required: true },
+        { key: 'slug', label: '頁面代稱（Slug）', type: 'text', required: true, description: '僅限英文、數字與連字號，用於網址識別。' },
         { key: 'title', label: '標題', type: 'text', required: true },
         {
           key: 'content_rich_text',

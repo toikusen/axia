@@ -30,7 +30,7 @@ interface JsonMapEntry {
             [disabled]="disabled"
             [(ngModel)]="entry.key"
             (ngModelChange)="emitChanges()"
-            placeholder="Key"
+            placeholder="名稱（如：instagram）"
           />
           <input
             pInputText
@@ -38,7 +38,7 @@ interface JsonMapEntry {
             [disabled]="disabled"
             [(ngModel)]="entry.value"
             (ngModelChange)="emitChanges()"
-            placeholder="Value"
+            placeholder="連結 URL"
           />
           <button
             pButton

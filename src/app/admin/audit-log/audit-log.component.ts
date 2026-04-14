@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, OnInit, inject, signal } from '@angular/core';
 import { TableModule } from 'primeng/table';
 import { VersionService } from '../../core/services/version.service';
-import { formatDateLabel } from '../shared/admin.utils';
+import { formatDateLabel, translateAction, translateTableName } from '../shared/admin.utils';
 
 @Component({
   selector: 'app-audit-log',
@@ -32,14 +32,14 @@ import { formatDateLabel } from '../shared/admin.utils';
               <th>資料表</th>
               <th>動作</th>
               <th>操作者</th>
-              <th>Record ID</th>
+              <th>記錄 ID</th>
             </tr>
           </ng-template>
           <ng-template pTemplate="body" let-item>
             <tr>
               <td>{{ formatLabel(item.changed_at) }}</td>
-              <td>{{ item.table_name }}</td>
-              <td>{{ item.action }}</td>
+              <td>{{ translateTableName(item.table_name) }}</td>
+              <td>{{ translateAction(item.action) }}</td>
               <td>{{ item.changed_by_email || item.changed_by || '未知使用者' }}</td>
               <td>{{ item.record_id }}</td>
             </tr>
@@ -63,7 +63,7 @@ export class AuditLogComponent implements OnInit {
     try {
       this.entries.set(await this.versionService.getRecent(100));
     } catch (error) {
-      this.errorMessage.set(error instanceof Error ? error.message : 'Audit Log 載入失敗。');
+      this.errorMessage.set(error instanceof Error ? error.message : '操作紀錄載入失敗。');
     } finally {
       this.loading.set(false);
     }
@@ -71,6 +71,14 @@ export class AuditLogComponent implements OnInit {
 
   protected formatLabel(value: string): string {
     return formatDateLabel(value);
+  }
+
+  protected translateTableName(name: string): string {
+    return translateTableName(name);
+  }
+
+  protected translateAction(action: string): string {
+    return translateAction(action);
   }
 }
 

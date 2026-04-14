@@ -31,20 +31,13 @@ import { Information } from '../../../core/models/information.model';
             <img [src]="item()!.cover_image_url!" [alt]="item()!.title"
                  class="w-full max-h-96 object-cover mb-8 border border-border" />
           }
-          <div class="prose-axia" [innerHTML]="safeContent()"></div>
+          <div class="prose-axia prose-axia-light" [innerHTML]="safeContent()"></div>
         </article>
       } @else {
         <p class="text-text-secondary">載入中...</p>
       }
     </div>
   `,
-  styles: [`
-    .prose-axia :is(p, li) { color: #ddd8cf; line-height: 1.8; margin-bottom: 1em; font-size: 0.9rem; }
-    .prose-axia h2 { color: #c8a882; font-size: 1.1rem; font-family: Georgia, serif; letter-spacing: 0.1em; margin: 2em 0 0.75em; }
-    .prose-axia a { color: #c8a882; text-decoration: underline; }
-    .prose-axia img { max-width: 100%; }
-    .prose-axia ul { padding-left: 1.25rem; list-style-type: disc; }
-  `]
 })
 export class InformationDetailComponent implements OnInit {
   item = signal<Information | null>(null);

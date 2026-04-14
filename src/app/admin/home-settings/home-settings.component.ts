@@ -27,7 +27,7 @@ import { JsonMapInputComponent } from '../shared/json-map-input/json-map-input.c
           </div>
 
           <div class="space-y-3 md:col-span-2">
-            <label class="block text-sm font-medium text-white/90">SNS Links</label>
+            <label class="block text-sm font-medium text-white/90">社群連結</label>
             <app-json-map-input formControlName="sns_links"></app-json-map-input>
           </div>
         </div>

@@ -16,6 +16,12 @@
           class="nav-link"
         >{{ link.label }}</a>
       }
+      @if (authService.currentUser()) {
+        <a
+          routerLink="/admin"
+          class="nav-link text-accent border border-accent/40 rounded px-3 py-1 hover:bg-accent/10 transition-colors"
+        >後台管理</a>
+      }
     </div>
 
     <!-- Mobile Hamburger -->
@@ -53,6 +59,13 @@
           class="nav-link text-sm py-1"
           (click)="closeMenu()"
         >{{ link.label }}</a>
+      }
+      @if (authService.currentUser()) {
+        <a
+          routerLink="/admin"
+          class="nav-link text-sm py-1 text-accent"
+          (click)="closeMenu()"
+        >後台管理</a>
       }
     </div>
   </div>

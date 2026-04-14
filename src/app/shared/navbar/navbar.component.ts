@@ -1,6 +1,7 @@
-import { Component, HostListener, signal } from '@angular/core';
+import { Component, HostListener, inject, signal } from '@angular/core';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { NgClass } from '@angular/common';
+import { AuthService } from '../../core/services/auth.service';
 
 @Component({
   selector: 'app-navbar',
@@ -9,6 +10,7 @@ import { NgClass } from '@angular/common';
   templateUrl: './navbar.component.html',
 })
 export class NavbarComponent {
+  protected readonly authService = inject(AuthService);
   menuOpen = signal(false);
   scrolled = signal(false);
 

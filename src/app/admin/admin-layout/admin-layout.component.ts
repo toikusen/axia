@@ -64,7 +64,17 @@ interface AdminNavItem {
             }
           </nav>
 
-          <div class="mt-auto">
+          <div class="mt-auto flex flex-col gap-2">
+            <a
+              routerLink="/"
+              pButton
+              type="button"
+              severity="secondary"
+              class="w-full"
+              icon="pi pi-home"
+              label="回首頁"
+              (click)="sidebarOpen.set(false)"
+            ></a>
             <button
               pButton
               type="button"
@@ -172,6 +182,6 @@ export class AdminLayoutComponent implements OnInit, OnDestroy {
       currentRoute = currentRoute.firstChild;
     }
 
-    return (currentRoute?.data?.['title'] as string | undefined) ?? 'Dashboard';
+    return (currentRoute?.data?.['title'] as string | undefined) ?? '總覽';
   }
 }

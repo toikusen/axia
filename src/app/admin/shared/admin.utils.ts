@@ -70,6 +70,33 @@ export function tagsToInputValue(tags: unknown): string {
   return Array.isArray(tags) ? tags.join(', ') : '';
 }
 
+const TABLE_NAME_LABELS: Record<string, string> = {
+  information: '最新消息',
+  schedule: '行程',
+  member: '成員',
+  video: '影片',
+  discography: '唱片',
+  goods: '周邊商品',
+  static_page: '規章 / 頁面',
+};
+
+const ACTION_LABELS: Record<string, string> = {
+  INSERT: '新增',
+  UPDATE: '更新',
+  DELETE: '刪除',
+  insert: '新增',
+  update: '更新',
+  delete: '刪除',
+};
+
+export function translateTableName(tableName: string): string {
+  return TABLE_NAME_LABELS[tableName] ?? tableName;
+}
+
+export function translateAction(action: string): string {
+  return ACTION_LABELS[action] ?? action;
+}
+
 export function formatDateLabel(value: unknown, includeTime = true): string {
   if (!value || typeof value !== 'string') {
     return '—';

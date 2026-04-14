@@ -10,7 +10,7 @@ import { StaticPageService } from '../../core/services/static-page.service';
 import { VideoService } from '../../core/services/video.service';
 import { ContactService } from '../../core/services/contact.service';
 import { VersionService } from '../../core/services/version.service';
-import { formatDateLabel } from '../shared/admin.utils';
+import { formatDateLabel, translateAction, translateTableName } from '../shared/admin.utils';
 
 interface DashboardStat {
   label: string;
@@ -57,9 +57,9 @@ interface DashboardStat {
             <div class="flex items-center justify-between gap-4 py-3">
               <div class="flex min-w-0 items-center gap-3">
                 <span class="shrink-0 rounded bg-accent/10 px-2 py-0.5 font-mono text-xs text-accent">
-                  {{ entry.action }}
+                  {{ translateAction(entry.action) }}
                 </span>
-                <span class="truncate text-sm text-white">{{ entry.table_name }}</span>
+                <span class="truncate text-sm text-white">{{ translateTableName(entry.table_name) }}</span>
               </div>
               <div class="shrink-0 text-right">
                 <p class="text-xs text-white/45">{{ formatLabel(entry.changed_at) }}</p>
@@ -118,23 +118,23 @@ export class DashboardComponent implements OnInit {
       ]);
 
       this.stats.set([
-        { label: 'Information', count: informationCount, icon: 'pi-info-circle', link: '/admin/information' },
-        { label: 'Schedule', count: scheduleCount, icon: 'pi-calendar', link: '/admin/schedule' },
-        { label: 'Member', count: memberCount, icon: 'pi-users', link: '/admin/member' },
-        { label: 'Video', count: videoCount, icon: 'pi-video', link: '/admin/video' },
-        { label: 'Discography', count: discographyCount, icon: 'pi-headphones', link: '/admin/discography' },
-        { label: 'Goods', count: goodsCount, icon: 'pi-shopping-cart', link: '/admin/goods' },
+        { label: '最新消息', count: informationCount, icon: 'pi-info-circle', link: '/admin/information' },
+        { label: '行程', count: scheduleCount, icon: 'pi-calendar', link: '/admin/schedule' },
+        { label: '成員', count: memberCount, icon: 'pi-users', link: '/admin/member' },
+        { label: '影片', count: videoCount, icon: 'pi-video', link: '/admin/video' },
+        { label: '唱片', count: discographyCount, icon: 'pi-headphones', link: '/admin/discography' },
+        { label: '周邊商品', count: goodsCount, icon: 'pi-shopping-cart', link: '/admin/goods' },
         {
-          label: 'Rules / Pages',
+          label: '規章 / 頁面',
           count: staticPages.filter(page => page.slug !== 'contact-info').length,
           icon: 'pi-file',
           link: '/admin/rules',
         },
-        { label: 'Contact Messages', count: messageCount, icon: 'pi-envelope', link: '/admin/contact' },
+        { label: '聯絡留言', count: messageCount, icon: 'pi-envelope', link: '/admin/contact' },
       ]);
       this.recentVersions.set(recentVersions);
     } catch (error) {
-      this.errorMessage.set(error instanceof Error ? error.message : 'Dashboard 載入失敗。');
+      this.errorMessage.set(error instanceof Error ? error.message : '總覽載入失敗。');
     } finally {
       this.loading.set(false);
     }
@@ -142,6 +142,14 @@ export class DashboardComponent implements OnInit {
 
   protected formatLabel(value: string): string {
     return formatDateLabel(value);
+  }
+
+  protected translateAction(action: string): string {
+    return translateAction(action);
+  }
+
+  protected translateTableName(tableName: string): string {
+    return translateTableName(tableName);
   }
 }
 

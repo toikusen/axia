@@ -17,7 +17,7 @@ import { StaticPageService } from '../../core/services/static-page.service';
 
       <!-- 聯絡資訊顯示 -->
       @if (contactInfo()) {
-        <div class="prose-axia mb-12 pb-12 border-b border-border" [innerHTML]="contactInfo()"></div>
+        <div class="prose-axia prose-axia-muted mb-12 pb-12 border-b border-border" [innerHTML]="contactInfo()"></div>
       }
 
       @if (submitted()) {
@@ -85,11 +85,6 @@ import { StaticPageService } from '../../core/services/static-page.service';
       }
     </div>
   `,
-  styles: [`
-    .prose-axia :is(p, li) { color: #6a6870; line-height: 1.8; margin-bottom: 1em; font-size: 0.875rem; }
-    .prose-axia h2 { color: #c8a882; font-size: 1rem; font-family: Georgia, serif; letter-spacing: 0.1em; margin: 2em 0 0.75em; }
-    .prose-axia a { color: #c8a882; text-decoration: underline; }
-  `]
 })
 export class ContactComponent implements OnInit {
   form: FormGroup;
