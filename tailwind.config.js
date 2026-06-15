@@ -16,7 +16,7 @@ module.exports = {
           subtle: '#2e3036',
         },
         'text-primary': '#ddd8cf',
-        'text-secondary': '#6a6870',
+        'text-secondary': '#9c9aa4',
         accent: {
           DEFAULT: '#c8a882',
           dark: '#a8886a',

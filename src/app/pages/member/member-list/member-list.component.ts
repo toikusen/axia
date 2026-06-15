@@ -28,7 +28,7 @@ import { Member } from '../../../core/models/member.model';
               }
             </div>
             <div class="p-3 border-t" [style.border-color]="member.color_hex">
-              <p class="text-text-primary text-sm font-display tracking-widest">{{ member.name }}</p>
+              <p class="text-text-primary text-sm font-display tracking-widest break-words">{{ member.name }}</p>
             </div>
           </a>
         }

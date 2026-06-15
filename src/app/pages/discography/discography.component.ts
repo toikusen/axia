@@ -28,7 +28,7 @@ import { Discography, DISCOGRAPHY_TYPE_LABELS } from '../../core/models/discogra
                 </div>
               }
             </div>
-            <p class="text-text-primary text-sm mb-0.5">{{ item.title }}</p>
+            <p class="text-text-primary text-sm mb-0.5 line-clamp-2 min-h-[2.6em]">{{ item.title }}</p>
             <div class="flex items-center gap-2">
               <span class="text-accent text-xs border border-border px-1.5 py-0.5">
                 {{ typeLabel(item.type) }}

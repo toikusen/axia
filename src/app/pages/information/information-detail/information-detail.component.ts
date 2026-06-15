@@ -26,7 +26,7 @@ import { Information } from '../../../core/models/information.model';
               }
             </div>
           }
-          <h1 class="text-2xl text-text-primary font-display mb-8 leading-snug">{{ item()!.title }}</h1>
+          <h1 class="font-display text-3xl md:text-4xl text-text-primary mb-8 leading-snug">{{ item()!.title }}</h1>
           @if (item()!.cover_image_url) {
             <img [src]="item()!.cover_image_url!" [alt]="item()!.title"
                  class="w-full max-h-96 object-cover mb-8 border border-border" />

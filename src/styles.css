@@ -63,6 +63,10 @@ body {
   @apply bg-transparent border border-accent text-accent text-xs tracking-widest uppercase px-6 py-2.5
          hover:bg-accent hover:text-bg transition-all duration-200 cursor-pointer;
 }
+.link-cta {
+  @apply text-accent text-xs tracking-widest uppercase inline-flex items-center gap-1
+         py-2 hover:underline transition-colors duration-200;
+}
 
 /* ═══════════════════════════════════════════════════════════
    Admin — Design Tokens (CSS custom properties)
@@ -214,18 +218,51 @@ textarea.p-inputtext:disabled,
   box-shadow: 0 16px 40px rgba(0, 0, 0, 0.50);
 }
 
+/* ── Admin form controls（明確定義，勿再依賴 .p-inputtext 巧合）── */
+.admin-input,
+.admin-textarea {
+  background: rgba(255, 255, 255, 0.035);
+  border: 1px solid rgba(200, 168, 130, 0.48);
+  border-radius: 0.5rem;
+  color: var(--admin-text);
+  font-family: 'Noto Sans TC', sans-serif;
+  font-size: 0.875rem;
+  padding: 0.625rem 0.875rem;
+  width: 100%;
+  outline: none;
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+.admin-textarea { resize: vertical; min-height: 8rem; line-height: 1.6; }
+.admin-input:focus,
+.admin-textarea:focus {
+  border-color: var(--admin-accent);
+  box-shadow: 0 0 0 3px rgba(200, 168, 130, 0.12);
+}
+.admin-input::placeholder,
+.admin-textarea::placeholder { color: var(--admin-text-muted); }
+
 /* ═══════════════════════════════════════════════════════════
    Prose — Quill v2 rich text output renderer
    Global scope required: [innerHTML] content bypasses Angular
    View Encapsulation and won't receive component-scoped styles.
    ═══════════════════════════════════════════════════════════ */
 
+/* ── Base — overflow & break protection ── */
+.prose-axia {
+  overflow-wrap: break-word;
+  word-break: break-word;
+}
+.prose-axia video,
+.prose-axia iframe { max-width: 100%; height: auto; }
+.prose-axia pre { white-space: pre-wrap; overflow-wrap: break-word; }
+.prose-axia table { display: block; max-width: 100%; overflow-x: auto; border-collapse: collapse; }
+
 /* ── Lists (PrimeNG p-editor stores standard ol/ul HTML) ──
    Tailwind preflight resets list-style + padding to none/0,
    so these must be explicitly restored.                     ── */
 .prose-axia ol { list-style-type: decimal; padding-left: 1.5em; }
 .prose-axia ul { list-style-type: disc;    padding-left: 1.5em; }
-.prose-axia li { display: list-item; line-height: 1.8; margin-bottom: 0.25em; }
+.prose-axia li { display: list-item; line-height: 1.9; margin-bottom: 0.25em; }
 
 /* ── Alignment ── */
 .prose-axia .ql-align-center  { text-align: center; }
@@ -247,21 +284,22 @@ textarea.p-inputtext:disabled,
 
 /* ── Links and images ── */
 .prose-axia a   { color: #c8a882; text-decoration: underline; }
-.prose-axia img { max-width: 100%; }
+.prose-axia img { max-width: 100%; height: auto; }
 
 /* ── Paragraph spacing ── */
-.prose-axia p { margin-bottom: 1em; line-height: 1.8; }
+.prose-axia p { margin-bottom: 1em; line-height: 1.9; }
+.prose-axia blockquote { line-height: 1.9; }
 
 /* ── Color variants ── */
 /* muted — rules, contact */
 .prose-axia-muted p,
 .prose-axia-muted li,
-.prose-axia-muted blockquote { color: #6a6870; font-size: 0.875rem; }
+.prose-axia-muted blockquote { color: #c7c2b9; font-size: 0.975rem; }
 
 /* light — information-detail */
 .prose-axia-light p,
 .prose-axia-light li,
-.prose-axia-light blockquote { color: #ddd8cf; font-size: 0.9rem; }
+.prose-axia-light blockquote { color: #c7c2b9; font-size: 1rem; }
 
 /* ═══════════════════════════════════════════════════════════
    Admin — Prose

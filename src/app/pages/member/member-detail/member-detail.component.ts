@@ -26,9 +26,9 @@ import { Member } from '../../../core/models/member.model';
         </div>
         <div class="max-w-2xl mx-auto px-6 py-12">
           <a routerLink="/member" class="nav-link text-xs block mb-8">← MEMBER</a>
-          <h1 class="font-display text-4xl text-text-primary tracking-widest mb-6">{{ member()!.name }}</h1>
+          <h1 class="font-display text-3xl md:text-4xl text-text-primary tracking-wider break-words mb-6">{{ member()!.name }}</h1>
           <div class="w-8 h-px mb-8" [style.background-color]="member()!.color_hex"></div>
-          <p class="text-text-secondary leading-relaxed mb-10">{{ member()!.bio }}</p>
+          <p class="text-text-primary/90 leading-relaxed mb-10">{{ member()!.bio }}</p>
           @if (snsEntries().length > 0) {
             <div class="flex gap-4 flex-wrap">
               @for (sns of snsEntries(); track sns.platform) {

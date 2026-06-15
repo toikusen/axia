@@ -14,7 +14,7 @@ import { Goods } from '../../core/models/goods.model';
 
       <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-6">
         @for (item of items(); track item.id) {
-          <div class="group relative">
+          <div class="group relative flex flex-col h-full">
             <!-- Image -->
             <div class="aspect-square bg-bg-secondary border border-border rounded-sm overflow-hidden mb-3 group-hover:border-accent transition-colors duration-300 relative">
               @if (item.image_url) {
@@ -28,13 +28,15 @@ import { Goods } from '../../core/models/goods.model';
                 </div>
               }
             </div>
-            <p class="text-text-primary text-sm mb-1">{{ item.name }}</p>
+            <p class="text-text-primary text-sm mb-1 line-clamp-2 min-h-[2.6em]">{{ item.name }}</p>
             @if (item.description) {
-              <p class="text-text-secondary text-xs mb-2">{{ item.description }}</p>
+              <p class="text-text-secondary text-xs mb-2 line-clamp-2 min-h-[2.8em]">{{ item.description }}</p>
             }
             @if (item.purchase_url && !item.is_sold_out) {
-              <a [href]="item.purchase_url" target="_blank" rel="noopener"
-                 class="btn-primary text-xs inline-block">購買 →</a>
+              <div class="mt-auto">
+                <a [href]="item.purchase_url" target="_blank" rel="noopener"
+                   class="btn-primary text-xs inline-block">購買 →</a>
+              </div>
             }
           </div>
         }

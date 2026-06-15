@@ -20,7 +20,7 @@ import { StaticPage } from '../../core/models/static-page.model';
         <div class="flex gap-4 mb-10 border-b border-border pb-4 flex-wrap">
           @for (page of pages(); track page.slug) {
             <button
-              class="text-xs tracking-widest uppercase transition-colors duration-200 pb-2"
+              class="text-xs tracking-widest uppercase transition-colors duration-200 py-3"
               [class.text-accent]="currentPage()?.slug === page.slug"
               [class.border-b]="currentPage()?.slug === page.slug"
               [class.border-accent]="currentPage()?.slug === page.slug"
@@ -33,7 +33,7 @@ import { StaticPage } from '../../core/models/static-page.model';
 
       @if (currentPage()) {
         <div>
-          <h1 class="font-display text-2xl text-text-primary mb-8">{{ currentPage()!.title }}</h1>
+          <h1 class="font-display text-3xl text-text-primary mb-8">{{ currentPage()!.title }}</h1>
           <div class="prose-axia prose-axia-muted" [innerHTML]="safeContent()"></div>
         </div>
       } @else if (pages().length === 0) {

@@ -13,7 +13,7 @@ import { Schedule } from '../../core/models/schedule.model';
   imports: [RouterLink, DatePipe],
   template: `
     <!-- Hero Section -->
-    <section class="relative min-h-screen flex items-center justify-center overflow-hidden">
+    <section class="relative min-h-[100dvh] flex items-center justify-center overflow-hidden">
       <div class="absolute inset-0 bg-gradient-to-b from-bg via-bg-secondary to-bg z-0">
         @if (heroImageUrl()) {
           <img
@@ -36,7 +36,7 @@ import { Schedule } from '../../core/models/schedule.model';
     <section class="max-w-4xl mx-auto px-6 py-16">
       <div class="flex items-center justify-between mb-8">
         <span class="section-label">INFORMATION</span>
-        <a routerLink="/information" class="nav-link text-xs">VIEW ALL →</a>
+        <a routerLink="/information" class="link-cta">VIEW ALL →</a>
       </div>
       <div class="flex flex-col divide-y divide-border">
         @for (item of latestNews(); track item.id) {
@@ -57,7 +57,7 @@ import { Schedule } from '../../core/models/schedule.model';
     <section class="max-w-4xl mx-auto px-6 py-16 border-t border-border">
       <div class="flex items-center justify-between mb-8">
         <span class="section-label">SCHEDULE</span>
-        <a routerLink="/schedule" class="nav-link text-xs">VIEW ALL →</a>
+        <a routerLink="/schedule" class="link-cta">VIEW ALL →</a>
       </div>
       <div class="flex flex-col divide-y divide-border">
         @for (item of upcomingSchedule(); track item.id) {

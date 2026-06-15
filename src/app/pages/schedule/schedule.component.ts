@@ -28,7 +28,7 @@ import { Schedule } from '../../core/models/schedule.model';
                 <p class="text-text-primary mb-1">{{ item.event_name }}</p>
                 <p class="text-text-secondary text-sm">{{ item.venue }}</p>
                 @if (item.notes) {
-                  <p class="text-text-secondary text-xs mt-2">{{ item.notes }}</p>
+                  <p class="text-text-secondary text-xs mt-2 leading-relaxed">{{ item.notes }}</p>
                 }
                 @if (item.ticket_url) {
                   <a [href]="item.ticket_url" target="_blank" rel="noopener"
