@@ -17,6 +17,7 @@ export type AdminFieldType =
   | 'datetime'
   | 'date'
   | 'select'
+  | 'segmented'
   | 'toggle'
   | 'number'
   | 'color'

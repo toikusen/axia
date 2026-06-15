@@ -63,7 +63,8 @@ export function getAdminResourceConfig(resourceKey: AdminResourceKey): AdminReso
         },
       ],
       fields: [
-        { key: 'title', label: '標題', type: 'text', required: true },
+        { key: 'title', label: '標題', type: 'text', required: true,
+          description: '會顯示在官網消息列表與分享連結，建議 20 字以內。' },
         {
           key: 'content_rich_text',
           label: '內容',
@@ -85,18 +86,21 @@ export function getAdminResourceConfig(resourceKey: AdminResourceKey): AdminReso
           type: 'tags',
           span: 2,
           placeholder: '以半形逗號分隔，例如：公告, 活動',
+          description: '用來分類消息，讀者可依標籤篩選（例如：公告、活動）。',
         },
         {
           key: 'status',
           label: '狀態',
-          type: 'select',
+          type: 'segmented',
           required: true,
           options: [
             { label: '草稿', value: 'draft' },
             { label: '已發布', value: 'published' },
           ],
+          description: '已發布：立即出現在官網；草稿：只有後台看得到。',
         },
-        { key: 'published_at', label: '發布時間', type: 'datetime' },
+        { key: 'published_at', label: '發布時間', type: 'datetime',
+          description: '可預約未來時間，到時會自動公開。' },
       ],
       emptyValue: () => ({
         title: '',
@@ -144,7 +148,8 @@ export function getAdminResourceConfig(resourceKey: AdminResourceKey): AdminReso
         { key: 'event_name', label: '活動名稱', type: 'text', required: true },
         { key: 'event_date', label: '活動時間', type: 'datetime', required: true },
         { key: 'venue', label: '場地', type: 'text', required: true },
-        { key: 'ticket_url', label: '購票連結', type: 'text' },
+        { key: 'ticket_url', label: '購票連結', type: 'text',
+          description: '貼上完整網址（https://…），沒有可留空。' },
         { key: 'notes', label: '備註', type: 'richtext', span: 2, rows: 6 },
       ],
       emptyValue: () => ({
@@ -373,7 +378,8 @@ export function getAdminResourceConfig(resourceKey: AdminResourceKey): AdminReso
           type: 'image',
           uploadFolder: 'goods',
         },
-        { key: 'purchase_url', label: '購買連結', type: 'text' },
+        { key: 'purchase_url', label: '購買連結', type: 'text',
+          description: '貼上完整網址（https://…），沒有可留空。' },
         { key: 'is_sold_out', label: '已售完', type: 'toggle' },
         { key: 'sort_order', label: '排序', type: 'number', step: '1' },
         { key: 'description', label: '描述', type: 'richtext', span: 2, rows: 6 },
@@ -411,12 +417,13 @@ export function getAdminResourceConfig(resourceKey: AdminResourceKey): AdminReso
       singularLabel: '規則頁面',
       basePath: '/admin/rules',
       columns: [
-        { header: '頁面代稱', key: 'slug' },
+        { header: '頁面網址', key: 'slug' },
         { header: '標題', key: 'title' },
         { header: '排序', render: item => String(item['sort_order'] ?? 0) },
       ],
       fields: [
-        { key: 'slug', label: '頁面代稱（Slug）', type: 'text', required: true, description: '僅限英文、數字與連字號，用於網址識別。' },
+        { key: 'slug', label: '頁面網址', type: 'text', required: true,
+          description: '會出現在網址裡，例如 axia.com/rules/membership。僅限英文小寫、數字與連字號（-）。' },
         { key: 'title', label: '標題', type: 'text', required: true },
         {
           key: 'content_rich_text',

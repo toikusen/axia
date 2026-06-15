@@ -29,7 +29,7 @@ import { VersionHistoryComponent } from '../version-history/version-history.comp
         <a pButton [routerLink]="['new']" icon="pi pi-plus" label="新增"></a>
       </div>
 
-      <div class="admin-panel overflow-x-auto">
+      <div class="admin-panel overflow-x-auto hidden md:block">
         @if (errorMessage()) {
           <div class="border-b border-accent/10 px-6 py-4 text-sm text-red-300" role="alert" aria-live="assertive">
             {{ errorMessage() }}
@@ -100,6 +100,35 @@ import { VersionHistoryComponent } from '../version-history/version-history.comp
             </tr>
           </ng-template>
         </p-table>
+      </div>
+
+      <!-- 窄畫面：卡片堆疊 -->
+      <div class="space-y-3 md:hidden">
+        @if (errorMessage()) {
+          <div class="admin-panel px-5 py-4 text-sm text-red-300" role="alert">{{ errorMessage() }}</div>
+        }
+        @for (item of items(); track item['id']) {
+          <div class="admin-panel p-4">
+            <div class="space-y-2">
+              @for (column of config().columns; track column.header) {
+                <div class="flex items-start justify-between gap-3">
+                  <span class="shrink-0 text-xs text-white/45">{{ column.header }}</span>
+                  <span class="text-right text-sm text-white">{{ getCellValue(item, column.key, column.render) }}</span>
+                </div>
+              }
+            </div>
+            <div class="mt-4 flex gap-2 border-t border-accent/10 pt-4">
+              <a pButton [routerLink]="[recordId(item)]" severity="secondary" icon="pi pi-pencil"
+                 label="編輯" class="flex-1 !min-h-[44px]"></a>
+              <button pButton type="button" severity="secondary" icon="pi pi-history"
+                      label="歷史" class="flex-1 !min-h-[44px]" (click)="openHistory(recordId(item))"></button>
+              <button pButton type="button" severity="danger" icon="pi pi-trash" aria-label="刪除"
+                      class="!min-h-[44px] !min-w-[44px]" (click)="confirmDelete(recordId(item))"></button>
+            </div>
+          </div>
+        } @empty {
+          <div class="admin-panel px-5 py-12 text-center text-sm text-white/55">目前沒有資料。</div>
+        }
       </div>
 
       <app-version-history

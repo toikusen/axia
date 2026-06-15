@@ -33,8 +33,9 @@ import { StorageService } from '../../../core/services/storage.service';
           type="button"
           size="small"
           icon="pi pi-upload"
-          label="選擇圖片"
+          [label]="imageUrl ? '更換圖片' : '選擇圖片'"
           [disabled]="uploading()"
+          class="!min-h-[44px]"
           (click)="fileInput.click()"
         ></button>
         <button
@@ -45,9 +46,12 @@ import { StorageService } from '../../../core/services/storage.service';
           icon="pi pi-times"
           label="清除"
           [disabled]="uploading() || !imageUrl"
+          class="!min-h-[44px]"
           (click)="clearImage()"
         ></button>
       </div>
+
+      <p class="text-xs text-white/45">建議橫幅 1200×630px，JPG 或 PNG，10MB 以內。</p>
 
       @if (uploading()) {
         <div class="flex items-center gap-2 text-sm text-white/60">

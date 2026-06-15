@@ -7,6 +7,7 @@ import { DatePickerModule } from 'primeng/datepicker';
 import { EditorModule } from 'primeng/editor';
 import { InputTextModule } from 'primeng/inputtext';
 import { SelectModule } from 'primeng/select';
+import { SelectButtonModule } from 'primeng/selectbutton';
 import { ToggleSwitchModule } from 'primeng/toggleswitch';
 import { MessageService } from 'primeng/api';
 import { AdminFormField, AdminResourceKey } from '../admin.types';
@@ -28,6 +29,7 @@ import { getAdminResourceConfig } from '../resource-registry';
     EditorModule,
     InputTextModule,
     SelectModule,
+    SelectButtonModule,
     ToggleSwitchModule,
     ImageUploadComponent,
     JsonMapInputComponent,
@@ -148,6 +150,10 @@ import { getAdminResourceConfig } from '../resource-registry';
                     styleClass="w-full"
                   ></p-select>
                 }
+                @case ('segmented') {
+                  <p-selectbutton [options]="field.options ?? []" optionLabel="label" optionValue="value"
+                                  [formControlName]="field.key" [allowEmpty]="false" styleClass="w-full"></p-selectbutton>
+                }
                 @case ('toggle') {
                   <p-toggleswitch [formControlName]="field.key"></p-toggleswitch>
                 }
@@ -204,20 +210,16 @@ import { getAdminResourceConfig } from '../resource-registry';
           <p class="mt-6 text-sm text-red-300" role="alert" aria-live="assertive">{{ errorMessage() }}</p>
         }
 
-        <div class="mt-8 flex flex-wrap gap-3">
-          <button
-            pButton
-            type="submit"
-            [disabled]="submitting()"
-            icon="pi pi-save"
-            [label]="submitting() ? '儲存中…' : '儲存'"
-          ></button>
-          <a
-            pButton
-            severity="secondary"
-            [routerLink]="config().basePath"
-            label="取消"
-          ></a>
+        <div class="sticky bottom-0 z-10 -mx-6 -mb-6 mt-8 flex flex-wrap items-center justify-between gap-3
+                    border-t border-accent/20 bg-[#181411]/95 px-6 py-4 backdrop-blur">
+          <span class="inline-flex items-center gap-2 text-xs text-white/50">
+            <i class="pi pi-info-circle"></i>尚未儲存變更
+          </span>
+          <div class="flex gap-3">
+            <a pButton severity="secondary" [routerLink]="config().basePath" label="取消" class="!min-h-[44px]"></a>
+            <button pButton type="submit" [disabled]="submitting()" icon="pi pi-save"
+                    [label]="submitting() ? '儲存中…' : '儲存'" class="!min-h-[44px]"></button>
+          </div>
         </div>
       </form>
     </section>

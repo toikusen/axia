@@ -28,6 +28,7 @@ import { JsonMapInputComponent } from '../shared/json-map-input/json-map-input.c
 
           <div class="space-y-3 md:col-span-2">
             <label class="block text-sm font-medium text-white/90">社群連結</label>
+            <p class="text-xs text-white/45">填平台名稱與網址，會變成首頁/頁尾的社群圖示，沒有的留空即可。</p>
             <app-json-map-input formControlName="sns_links"></app-json-map-input>
           </div>
         </div>
