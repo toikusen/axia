@@ -31,12 +31,32 @@ import { JsonMapInputComponent } from '../shared/json-map-input/json-map-input.c
             <div class="space-y-2 md:col-span-2">
               <label class="block text-sm font-medium text-white/90">前台 Hero 預覽</label>
               <div class="relative overflow-hidden rounded-lg bg-[#0e0c0a]">
+                <!-- 模擬導覽列 -->
+                <div class="absolute inset-x-0 top-0 z-10 flex h-10 items-center justify-between px-4
+                            bg-transparent">
+                  <span class="font-serif text-sm tracking-[0.25em] text-[#ddd8cf]">AXIA</span>
+                  <div class="hidden items-center gap-3 sm:flex">
+                    <span class="text-[9px] tracking-widest text-[#9c9aa4]">INFORMATION</span>
+                    <span class="text-[9px] tracking-widest text-[#9c9aa4]">SCHEDULE</span>
+                    <span class="text-[9px] tracking-widest text-[#9c9aa4]">MEMBER</span>
+                    <span class="text-[9px] tracking-widest text-[#9c9aa4]">VIDEO</span>
+                    <span class="text-[9px] tracking-widest text-[#9c9aa4]">DISCOGRAPHY</span>
+                    <span class="text-[9px] tracking-widest text-[#9c9aa4]">GOODS</span>
+                  </div>
+                  <div class="flex flex-col gap-[3px] sm:hidden">
+                    <span class="block h-px w-4 bg-[#ddd8cf]"></span>
+                    <span class="block h-px w-4 bg-[#ddd8cf]"></span>
+                    <span class="block h-px w-4 bg-[#ddd8cf]"></span>
+                  </div>
+                </div>
+                <!-- KV 圖 -->
                 <img [src]="heroImageUrl()" alt="AXIA"
                      class="block mx-auto h-auto w-full max-w-full" />
+                <!-- 底部漸層 -->
                 <div class="pointer-events-none absolute inset-x-0 bottom-0 h-16
                             bg-gradient-to-b from-transparent to-[#222428]"></div>
               </div>
-              <p class="text-xs text-white/45">模擬前台效果（實際寬度上限 1180px，底部漸層融入頁面背景）。</p>
+              <p class="text-xs text-white/45">模擬前台效果（實際寬度上限 1180px，導覽列與底部漸層為裝飾用）。</p>
             </div>
           }
 
