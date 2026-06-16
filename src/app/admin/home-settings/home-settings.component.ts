@@ -22,9 +22,23 @@ import { JsonMapInputComponent } from '../shared/json-map-input/json-map-input.c
             <app-image-upload
               [imageUrl]="heroImageUrl()"
               uploadFolder="home-settings"
+              objectFit="contain"
               (imageUrlChange)="updateImage($event)"
             ></app-image-upload>
           </div>
+
+          @if (heroImageUrl()) {
+            <div class="space-y-2 md:col-span-2">
+              <label class="block text-sm font-medium text-white/90">前台 Hero 預覽</label>
+              <div class="relative overflow-hidden rounded-lg bg-[#0e0c0a]">
+                <img [src]="heroImageUrl()" alt="AXIA"
+                     class="block mx-auto h-auto w-full max-w-full" />
+                <div class="pointer-events-none absolute inset-x-0 bottom-0 h-16
+                            bg-gradient-to-b from-transparent to-[#222428]"></div>
+              </div>
+              <p class="text-xs text-white/45">模擬前台效果（實際寬度上限 1180px，底部漸層融入頁面背景）。</p>
+            </div>
+          }
 
           <div class="space-y-3 md:col-span-2">
             <label class="block text-sm font-medium text-white/90">社群連結</label>

@@ -14,7 +14,9 @@ import { StorageService } from '../../../core/services/storage.service';
         class="flex min-h-32 items-center justify-center overflow-hidden rounded-lg border border-dashed border-accent/25 bg-black/20"
       >
         @if (imageUrl) {
-          <img [src]="imageUrl" [alt]="altText" class="max-h-48 w-full object-cover" />
+          <img [src]="imageUrl" [alt]="altText"
+               class="w-full"
+               [class]="objectFit === 'contain' ? 'h-auto max-h-64 object-contain' : 'max-h-48 object-cover'" />
         } @else {
           <p class="text-sm text-white/40">尚未上傳圖片</p>
         }
@@ -72,6 +74,7 @@ export class ImageUploadComponent {
   @Input() imageUrl = '';
   @Input() uploadFolder = 'misc';
   @Input() altText = '已上傳的圖片預覽';
+  @Input() objectFit: 'cover' | 'contain' = 'cover';
   @Output() imageUrlChange = new EventEmitter<string>();
 
   protected readonly uploading = signal(false);
