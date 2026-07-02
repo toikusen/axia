@@ -24,7 +24,7 @@ alter table home_settings
 - 格式：`{ "goods": false, "rules": false }` — key 為路徑段（不含斜線），值 `false` 表示隱藏。
 - **缺 key 視為顯示**，因此預設 `'{}'` = 全部顯示，向後相容。
 - RLS 沿用 `home_settings` 既有政策（public read / admin write），不需變更。
-- migrations 目錄為手動執行流程：新增 `supabase/migrations/003_nav_visibility.sql`，由使用者在 Supabase Dashboard SQL Editor 執行。
+- migrations 目錄為手動執行流程：新增 `supabase/migrations/003_nav_visibility.sql`，由使用者在 Supabase Dashboard SQL Editor 執行。同時更新 `supabase/README.md`：Setup Instructions 補上第 3 步（執行 003），Tables 表格的 `home_settings` 描述補上 nav visibility。
 
 ## 後台
 
@@ -39,11 +39,12 @@ alter table home_settings
 - navbar 刻意不載入 supabase SDK（initial bundle 效能，見 navbar.component.ts 的 ponytail 註記）。因此用原生 `fetch()` 打 Supabase REST API：
 
 ```
-GET {supabaseUrl}/rest/v1/home_settings?select=nav_visibility
+GET {supabaseUrl}/rest/v1/home_settings?select=nav_visibility&limit=1
 headers: apikey: {anonKey}
 ```
 
-- navbar 的 `navLinks` 改為 signal，fetch 成功後過濾掉 `nav_visibility[path] === false` 的項目。
+- 注意：PostgREST 預設回傳**陣列**（非 SDK `.single()` 的單物件），因此回應是 `[{ nav_visibility: {...} }]`，取第一筆的 `nav_visibility`；空陣列視同 `{}`（全顯示）。
+- navbar 的 `navLinks` 改為 signal，fetch 成功後過濾掉隱藏項。注意 key 對應：`navLinks` 的 `path` 是 `/goods`（帶斜線），`nav_visibility` 的 key 是 `goods`（不帶斜線），過濾時必須先去掉 `path` 開頭的 `/` 再查表（`nav_visibility[path.slice(1)] === false` 即隱藏）。
 - fetch 失敗（網路錯誤等）：保持全部顯示（fail-open），不擋使用者。
 - 已知取捨：非同步載入造成毫秒級閃爍（先全顯示、隱藏項隨後消失），接受。
 
