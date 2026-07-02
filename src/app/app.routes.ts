@@ -7,7 +7,7 @@ export const routes: Routes = [
   },
   {
     path: '',
-    title: 'AXIA｜台灣地下偶像團體 官方網站',
+    title: 'AXIA｜官方網站',
     loadComponent: () => import('./pages/home/home.component').then(m => m.HomeComponent)
   },
   {
