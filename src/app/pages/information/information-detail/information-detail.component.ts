@@ -1,7 +1,7 @@
 import { Component, OnInit, signal } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { DatePipe } from '@angular/common';
-import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
+import { DomSanitizer, SafeHtml, Title } from '@angular/platform-browser';
 import { InformationService } from '../../../core/services/information.service';
 import { Information } from '../../../core/models/information.model';
 
@@ -46,11 +46,13 @@ export class InformationDetailComponent implements OnInit {
     private route: ActivatedRoute,
     private service: InformationService,
     private sanitizer: DomSanitizer,
+    private title: Title,
   ) {}
   ngOnInit() {
     const id = this.route.snapshot.paramMap.get('id')!;
     this.service.getById(id).subscribe(data => {
       this.item.set(data);
+      this.title.setTitle(`${data.title}｜AXIA`);
       this.safeContent.set(this.sanitizer.bypassSecurityTrustHtml(data.content_rich_text));
     });
   }

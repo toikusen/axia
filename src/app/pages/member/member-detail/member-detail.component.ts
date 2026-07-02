@@ -1,5 +1,6 @@
 import { Component, OnInit, signal } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
+import { Title } from '@angular/platform-browser';
 import { UpperCasePipe } from '@angular/common';
 import { MemberService } from '../../../core/services/member.service';
 import { Member } from '../../../core/models/member.model';
@@ -53,11 +54,12 @@ import { Member } from '../../../core/models/member.model';
 export class MemberDetailComponent implements OnInit {
   member = signal<Member | null>(null);
   snsEntries = signal<{ platform: string; url: string }[]>([]);
-  constructor(private route: ActivatedRoute, private service: MemberService) {}
+  constructor(private route: ActivatedRoute, private service: MemberService, private title: Title) {}
   ngOnInit() {
     const id = this.route.snapshot.paramMap.get('id')!;
     this.service.getById(id).subscribe(data => {
       this.member.set(data);
+      this.title.setTitle(`${data.name}｜成員介紹｜AXIA`);
       this.snsEntries.set(
         Object.entries(data.sns_links).map(([platform, url]) => ({ platform, url }))
       );
