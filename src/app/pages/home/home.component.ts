@@ -15,7 +15,7 @@ import { Member } from '../../core/models/member.model';
   imports: [RouterLink, DatePipe],
   template: `
     <!-- Hero Section -->
-    <section class="relative overflow-hidden bg-[#0e0c0a]">
+    <section class="relative overflow-hidden bg-[#0e0c0a] -mt-16 pt-16">
       @if (heroImageUrl()) {
         <img [src]="heroImageUrl()" alt="AXIA"
              class="block mx-auto h-auto w-full max-w-[1180px]" />

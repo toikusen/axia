@@ -67,12 +67,14 @@ import { Schedule } from '../../core/models/schedule.model';
 export class ScheduleComponent implements OnInit {
   items = signal<Schedule[]>([]);
   upcoming = computed(() => {
-    const now = new Date();
-    return this.items().filter(i => new Date(i.event_date) >= now);
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    return this.items().filter(i => new Date(i.event_date) >= today);
   });
   past = computed(() => {
-    const now = new Date();
-    return this.items().filter(i => new Date(i.event_date) < now).reverse();
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    return this.items().filter(i => new Date(i.event_date) < today).reverse();
   });
   constructor(private service: ScheduleService) {}
   ngOnInit() { this.service.getAll().subscribe(data => this.items.set(data)); }

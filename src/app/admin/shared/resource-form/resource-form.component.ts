@@ -1,5 +1,5 @@
 import { CommonModule, NgClass } from '@angular/common';
-import { Component, Injector, OnInit, computed, inject, signal } from '@angular/core';
+import { Component, HostListener, Injector, OnInit, computed, inject, signal } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { ButtonModule } from 'primeng/button';
@@ -15,6 +15,7 @@ import { markAllControlsTouched, tagsToInputValue } from '../admin.utils';
 import { ImageUploadComponent } from '../image-upload/image-upload.component';
 import { JsonMapInputComponent } from '../json-map-input/json-map-input.component';
 import { getAdminResourceConfig } from '../resource-registry';
+import { HasUnsavedChanges } from '../unsaved-changes.guard';
 
 @Component({
   selector: 'app-resource-form',
@@ -117,6 +118,7 @@ import { getAdminResourceConfig } from '../resource-registry';
                   <app-image-upload
                     [imageUrl]="stringValue(field.key)"
                     [uploadFolder]="field.uploadFolder ?? 'misc'"
+                    [hint]="field.imageHint ?? '建議橫幅 1200×630px，JPG 或 PNG，10MB 以內。'"
                     (imageUrlChange)="updateImage(field.key, $event)"
                   />
                 }
@@ -180,6 +182,9 @@ import { getAdminResourceConfig } from '../resource-registry';
                       [formControlName]="field.key"
                     />
                   </div>
+                  @if (form.get(field.key)?.hasError('pattern')) {
+                    <p class="text-xs text-red-300" role="alert">色碼格式須為 #RRGGBB，例如 #c8a882。</p>
+                  }
                 }
                 @case ('tags') {
                   <input
@@ -212,9 +217,15 @@ import { getAdminResourceConfig } from '../resource-registry';
 
         <div class="sticky bottom-0 z-10 -mx-6 -mb-6 mt-8 flex flex-wrap items-center justify-between gap-3
                     border-t border-accent/20 bg-[#181411]/95 px-6 py-4 backdrop-blur">
-          <span class="inline-flex items-center gap-2 text-xs text-white/50">
-            <i class="pi pi-info-circle"></i>尚未儲存變更
-          </span>
+          @if (form.dirty) {
+            <span class="inline-flex items-center gap-2 text-xs text-amber-300/80">
+              <i class="pi pi-info-circle"></i>尚未儲存變更
+            </span>
+          } @else {
+            <span class="inline-flex items-center gap-2 text-xs text-white/50">
+              <i class="pi pi-check-circle"></i>所有變更已儲存
+            </span>
+          }
           <div class="flex gap-3">
             <a pButton severity="secondary" [routerLink]="config().basePath" label="取消" class="!min-h-[44px]"></a>
             <button pButton type="submit" [disabled]="submitting()" icon="pi pi-save"
@@ -225,7 +236,7 @@ import { getAdminResourceConfig } from '../resource-registry';
     </section>
   `,
 })
-export class ResourceFormComponent implements OnInit {
+export class ResourceFormComponent implements OnInit, HasUnsavedChanges {
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
   private readonly injector = inject(Injector);
@@ -238,6 +249,18 @@ export class ResourceFormComponent implements OnInit {
   protected readonly submitting = signal(false);
   protected readonly errorMessage = signal('');
   protected readonly form = new FormGroup({});
+  private saved = false;
+
+  hasUnsavedChanges(): boolean {
+    return this.form.dirty && !this.saved;
+  }
+
+  @HostListener('window:beforeunload', ['$event'])
+  onBeforeUnload(event: BeforeUnloadEvent): void {
+    if (this.hasUnsavedChanges()) {
+      event.preventDefault();
+    }
+  }
 
   async ngOnInit(): Promise<void> {
     this.buildForm();
@@ -309,6 +332,7 @@ export class ResourceFormComponent implements OnInit {
         detail: `${this.config().singularLabel} 已儲存。`,
       });
 
+      this.saved = true;
       await this.router.navigate([this.config().basePath]);
     } catch (error) {
       this.errorMessage.set(error instanceof Error ? error.message : '儲存失敗。');
@@ -320,6 +344,9 @@ export class ResourceFormComponent implements OnInit {
   private buildForm(): void {
     for (const field of this.config().fields) {
       const validators = field.required ? [Validators.required] : [];
+      if (field.type === 'color') {
+        validators.push(Validators.pattern(/^#[0-9a-fA-F]{6}$/));
+      }
       this.form.addControl(field.key, new FormControl(null, { nonNullable: false, validators }));
     }
   }

@@ -33,7 +33,7 @@ import { StaticPageService } from '../../core/services/static-page.service';
             <input
               formControlName="name"
               type="text"
-              class="w-full bg-bg-secondary border border-border text-text-primary px-4 py-3 text-sm
+              class="w-full bg-bg-secondary border border-border text-text-primary px-4 py-3 text-base sm:text-sm
                      focus:outline-none focus:border-accent transition-colors duration-200"
               placeholder="您的姓名"
             />
@@ -47,7 +47,7 @@ import { StaticPageService } from '../../core/services/static-page.service';
             <input
               formControlName="email"
               type="email"
-              class="w-full bg-bg-secondary border border-border text-text-primary px-4 py-3 text-sm
+              class="w-full bg-bg-secondary border border-border text-text-primary px-4 py-3 text-base sm:text-sm
                      focus:outline-none focus:border-accent transition-colors duration-200"
               placeholder="your@email.com"
             />
@@ -61,12 +61,14 @@ import { StaticPageService } from '../../core/services/static-page.service';
             <textarea
               formControlName="message"
               rows="6"
-              class="w-full bg-bg-secondary border border-border text-text-primary px-4 py-3 text-sm
+              class="w-full bg-bg-secondary border border-border text-text-primary px-4 py-3 text-base sm:text-sm
                      focus:outline-none focus:border-accent transition-colors duration-200 resize-none"
               placeholder="請在此輸入您的訊息..."
             ></textarea>
             @if (form.get('message')?.invalid && form.get('message')?.touched) {
-              <p class="text-red-400 text-xs mt-1">請輸入訊息。</p>
+              <p class="text-red-400 text-xs mt-1">
+                {{ form.get('message')?.errors?.['minlength'] ? '訊息請至少輸入 10 個字。' : '請輸入訊息。' }}
+              </p>
             }
           </div>
 

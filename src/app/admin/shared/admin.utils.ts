@@ -37,6 +37,13 @@ export function toIsoDate(value: unknown): string | null {
   return value.toISOString().slice(0, 10);
 }
 
+/** 補上缺少的 https:// 前綴，避免前台 [href] 變相對路徑。 */
+export function normalizeUrl(value: string | null | undefined): string | null {
+  const v = (value ?? '').trim();
+  if (!v) return null;
+  return /^https?:\/\//i.test(v) ? v : `https://${v}`;
+}
+
 export function sanitizeStringMap(value: unknown): Record<string, string> {
   if (!value || typeof value !== 'object') {
     return {};

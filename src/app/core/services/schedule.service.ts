@@ -25,12 +25,14 @@ export class ScheduleService extends BaseAdminCrudService<Schedule> {
   }
 
   getUpcoming(limit: number): Observable<Schedule[]> {
-    const now = new Date().toISOString();
+    // 以當天 00:00 為界，活動「當天」仍算 upcoming
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
     return from(
       supabase
         .from('schedule')
         .select('*')
-        .gte('event_date', now)
+        .gte('event_date', today.toISOString())
         .order('event_date', { ascending: true })
         .limit(limit)
     ).pipe(map(({ data, error }) => {

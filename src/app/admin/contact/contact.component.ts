@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { MessageService } from 'primeng/api';
-import { Component, OnInit, inject, signal } from '@angular/core';
+import { Component, HostListener, OnInit, inject, signal } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ButtonModule } from 'primeng/button';
 import { TabsModule } from 'primeng/tabs';
@@ -11,6 +11,7 @@ import { StaticPage } from '../../core/models/static-page.model';
 import { ContactService } from '../../core/services/contact.service';
 import { StaticPageService } from '../../core/services/static-page.service';
 import { formatDateLabel } from '../shared/admin.utils';
+import { HasUnsavedChanges } from '../shared/unsaved-changes.guard';
 
 @Component({
   selector: 'app-contact-admin',
@@ -114,7 +115,7 @@ import { formatDateLabel } from '../shared/admin.utils';
     </section>
   `,
 })
-export class ContactComponent implements OnInit {
+export class ContactComponent implements OnInit, HasUnsavedChanges {
   private readonly staticPageService = inject(StaticPageService);
   private readonly contactService = inject(ContactService);
   private readonly messageService = inject(MessageService);
@@ -127,6 +128,17 @@ export class ContactComponent implements OnInit {
   protected readonly form = new FormGroup({
     content_rich_text: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
   });
+
+  hasUnsavedChanges(): boolean {
+    return this.form.dirty;
+  }
+
+  @HostListener('window:beforeunload', ['$event'])
+  onBeforeUnload(event: BeforeUnloadEvent): void {
+    if (this.hasUnsavedChanges()) {
+      event.preventDefault();
+    }
+  }
 
   async ngOnInit(): Promise<void> {
     try {
@@ -155,6 +167,7 @@ export class ContactComponent implements OnInit {
       this.contactPage = await this.staticPageService.update(this.contactPage.id, {
         content_rich_text: this.form.getRawValue().content_rich_text,
       });
+      this.form.markAsPristine();
       this.messageService.add({
         severity: 'success',
         summary: '儲存成功',

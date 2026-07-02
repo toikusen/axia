@@ -18,6 +18,7 @@ import { Video, getYoutubeThumbnail, getYoutubeEmbedUrl } from '../../core/model
           <div class="aspect-video w-full bg-bg-secondary border border-border overflow-hidden">
             <iframe
               [src]="featuredEmbedUrl()"
+              [title]="featured()!.title"
               class="w-full h-full"
               frameborder="0"
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
@@ -30,7 +31,7 @@ import { Video, getYoutubeThumbnail, getYoutubeEmbedUrl } from '../../core/model
 
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         @for (video of others(); track video.id) {
-          <div class="group cursor-pointer" (click)="selectVideo(video)">
+          <button type="button" class="group cursor-pointer text-left w-full" (click)="selectVideo(video)">
             <div class="aspect-video bg-bg-secondary border border-border overflow-hidden relative">
               <img
                 [src]="getThumbnail(video)"
@@ -44,7 +45,7 @@ import { Video, getYoutubeThumbnail, getYoutubeEmbedUrl } from '../../core/model
               </div>
             </div>
             <p class="text-text-secondary text-sm mt-2 group-hover:text-accent transition-colors duration-200">{{ video.title }}</p>
-          </div>
+          </button>
         }
       </div>
 

@@ -53,7 +53,7 @@ import { StorageService } from '../../../core/services/storage.service';
         ></button>
       </div>
 
-      <p class="text-xs text-white/45">建議橫幅 1200×630px，JPG 或 PNG，10MB 以內。</p>
+      <p class="text-xs text-white/45">{{ hint }}</p>
 
       @if (uploading()) {
         <div class="flex items-center gap-2 text-sm text-white/60">
@@ -75,6 +75,7 @@ export class ImageUploadComponent {
   @Input() uploadFolder = 'misc';
   @Input() altText = '已上傳的圖片預覽';
   @Input() objectFit: 'cover' | 'contain' = 'cover';
+  @Input() hint = '建議橫幅 1200×630px，JPG 或 PNG，10MB 以內。';
   @Output() imageUrlChange = new EventEmitter<string>();
 
   protected readonly uploading = signal(false);

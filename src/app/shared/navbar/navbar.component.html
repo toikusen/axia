@@ -26,7 +26,7 @@
 
     <!-- Mobile Hamburger -->
     <button
-      class="lg:hidden flex flex-col gap-1.5 p-2 cursor-pointer"
+      class="lg:hidden flex flex-col items-center justify-center gap-1.5 min-w-11 min-h-11 cursor-pointer"
       (click)="toggleMenu()"
       aria-label="選單"
     >
@@ -56,14 +56,14 @@
           [routerLink]="link.path"
           routerLinkActive="active"
           [routerLinkActiveOptions]="{ exact: false }"
-          class="nav-link text-sm py-1"
+          class="nav-link text-sm block !py-3.5"
           (click)="closeMenu()"
         >{{ link.label }}</a>
       }
       @if (authService.currentUser()) {
         <a
           routerLink="/admin"
-          class="nav-link text-sm py-1 text-accent"
+          class="nav-link text-sm block !py-3.5 text-accent"
           (click)="closeMenu()"
         >後台管理</a>
       }

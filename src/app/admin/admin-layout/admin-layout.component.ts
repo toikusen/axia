@@ -103,7 +103,7 @@ interface AdminNavItem {
               </div>
             </div>
 
-            <div class="rounded-full border border-accent/20 px-4 py-2 text-sm text-white/70">
+            <div class="max-w-[240px] truncate rounded-full border border-accent/20 px-4 py-2 text-sm text-white/70">
               {{ authService.currentUser()?.email || '未登入' }}
             </div>
           </header>

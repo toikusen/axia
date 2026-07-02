@@ -40,6 +40,7 @@ export interface AdminFormField {
   rows?: number;
   span?: 1 | 2;
   uploadFolder?: string;
+  imageHint?: string;
   step?: string;
 }
 

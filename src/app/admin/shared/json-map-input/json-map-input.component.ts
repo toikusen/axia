@@ -3,6 +3,7 @@ import { Component, forwardRef } from '@angular/core';
 import { ControlValueAccessor, FormsModule, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
+import { normalizeUrl } from '../admin.utils';
 
 interface JsonMapEntry {
   key: string;
@@ -38,7 +39,7 @@ interface JsonMapEntry {
             [disabled]="disabled"
             [(ngModel)]="entry.value"
             (ngModelChange)="emitChanges()"
-            placeholder="貼上該平台的網址"
+            placeholder="貼上完整網址（https:// 開頭），少打會自動補上"
           />
           <button
             pButton
@@ -105,7 +106,7 @@ export class JsonMapInputComponent implements ControlValueAccessor {
   protected emitChanges(): void {
     const value = Object.fromEntries(
       this.entries
-        .map(entry => [entry.key.trim(), entry.value.trim()])
+        .map(entry => [entry.key.trim(), normalizeUrl(entry.value) ?? ''])
         .filter(([key, entryValue]) => key.length > 0 || entryValue.length > 0)
     );
 

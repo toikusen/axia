@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { MessageService } from 'primeng/api';
-import { Component, OnInit, inject, signal } from '@angular/core';
+import { Component, HostListener, OnInit, inject, signal } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { ButtonModule } from 'primeng/button';
 import { HomeSettings } from '../../core/models/home-settings.model';
@@ -8,6 +8,7 @@ import { HomeSettingsService } from '../../core/services/home-settings.service';
 import { sanitizeStringMap } from '../shared/admin.utils';
 import { ImageUploadComponent } from '../shared/image-upload/image-upload.component';
 import { JsonMapInputComponent } from '../shared/json-map-input/json-map-input.component';
+import { HasUnsavedChanges } from '../shared/unsaved-changes.guard';
 
 @Component({
   selector: 'app-home-settings',
@@ -23,6 +24,7 @@ import { JsonMapInputComponent } from '../shared/json-map-input/json-map-input.c
               [imageUrl]="heroImageUrl()"
               uploadFolder="home-settings"
               objectFit="contain"
+              hint="超寬橫幅，建議 1920×1080px 以上（圖內文字置中）。"
               (imageUrlChange)="updateImage($event)"
             ></app-image-upload>
           </div>
@@ -71,11 +73,22 @@ import { JsonMapInputComponent } from '../shared/json-map-input/json-map-input.c
           <p class="mt-6 text-sm text-red-300" role="alert" aria-live="assertive">{{ errorMessage() }}</p>
         }
 
-        <div class="mt-8">
+        <div class="sticky bottom-0 z-10 -mx-6 -mb-6 mt-8 flex flex-wrap items-center justify-between gap-3
+                    border-t border-accent/20 bg-[#181411]/95 px-6 py-4 backdrop-blur">
+          @if (form.dirty) {
+            <span class="inline-flex items-center gap-2 text-xs text-amber-300/80">
+              <i class="pi pi-info-circle"></i>尚未儲存變更
+            </span>
+          } @else {
+            <span class="inline-flex items-center gap-2 text-xs text-white/50">
+              <i class="pi pi-check-circle"></i>所有變更已儲存
+            </span>
+          }
           <button
             pButton
             type="submit"
             icon="pi pi-save"
+            class="!min-h-[44px]"
             [disabled]="submitting() || !settingsId()"
             [label]="submitting() ? '儲存中…' : '儲存設定'"
           ></button>
@@ -84,7 +97,7 @@ import { JsonMapInputComponent } from '../shared/json-map-input/json-map-input.c
     </section>
   `,
 })
-export class HomeSettingsComponent implements OnInit {
+export class HomeSettingsComponent implements OnInit, HasUnsavedChanges {
   private readonly homeSettingsService = inject(HomeSettingsService);
   private readonly messageService = inject(MessageService);
   private settings: HomeSettings | null = null;
@@ -96,6 +109,17 @@ export class HomeSettingsComponent implements OnInit {
   protected readonly form = new FormGroup({
     sns_links: new FormControl<Record<string, string>>({}, { nonNullable: true }),
   });
+
+  hasUnsavedChanges(): boolean {
+    return this.form.dirty;
+  }
+
+  @HostListener('window:beforeunload', ['$event'])
+  onBeforeUnload(event: BeforeUnloadEvent): void {
+    if (this.hasUnsavedChanges()) {
+      event.preventDefault();
+    }
+  }
 
   async ngOnInit(): Promise<void> {
     try {
@@ -112,6 +136,7 @@ export class HomeSettingsComponent implements OnInit {
 
   protected updateImage(url: string): void {
     this.heroImageUrl.set(url);
+    this.form.markAsDirty();
   }
 
   protected async save(): Promise<void> {
@@ -127,6 +152,7 @@ export class HomeSettingsComponent implements OnInit {
         hero_image_url: this.heroImageUrl() || null,
         sns_links: sanitizeStringMap(this.form.getRawValue().sns_links),
       });
+      this.form.markAsPristine();
       this.messageService.add({
         severity: 'success',
         summary: '儲存成功',
