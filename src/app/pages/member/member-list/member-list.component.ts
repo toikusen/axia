@@ -19,7 +19,7 @@ import { Member } from '../../../core/models/member.model';
              class="group relative overflow-hidden border border-border hover:border-accent transition-all duration-300 block">
             <div class="aspect-[3/4] bg-bg-secondary overflow-hidden">
               @if (member.photo_url) {
-                <img [src]="member.photo_url" [alt]="member.name"
+                <img loading="lazy" [src]="member.photo_url" [alt]="member.name"
                      class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
               } @else {
                 <div class="w-full h-full flex items-center justify-center">

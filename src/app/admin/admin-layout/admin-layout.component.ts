@@ -6,6 +6,7 @@ import { ButtonModule } from 'primeng/button';
 import { ToastModule } from 'primeng/toast';
 import { filter, map, startWith } from 'rxjs/operators';
 import { AuthService } from '../../core/services/auth.service';
+import { ensureStylesheet } from '../shared/admin.utils';
 
 interface AdminNavItem {
   label: string;
@@ -131,6 +132,9 @@ export class AdminLayoutComponent implements OnInit, OnDestroy {
   };
 
   ngOnInit(): void {
+    // Admin-only stylesheets, kept out of the public global CSS bundle
+    ensureStylesheet('primeicons.css');
+    ensureStylesheet('quill-theme.css');
     this.mql.addEventListener('change', this.onMqlChange);
   }
 

@@ -1,7 +1,6 @@
-import { Component, HostListener, inject, signal } from '@angular/core';
+import { Component, HostListener, signal } from '@angular/core';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { NgClass } from '@angular/common';
-import { AuthService } from '../../core/services/auth.service';
 
 @Component({
   selector: 'app-navbar',
@@ -10,7 +9,11 @@ import { AuthService } from '../../core/services/auth.service';
   templateUrl: './navbar.component.html',
 })
 export class NavbarComponent {
-  protected readonly authService = inject(AuthService);
+  // ponytail: read supabase session token from localStorage instead of injecting
+  // AuthService — keeps the whole supabase-js SDK out of the initial bundle.
+  // Not reactive within a session; admin link appears on next page load after login.
+  protected readonly isLoggedIn =
+    Object.keys(localStorage).some(k => k.startsWith('sb-') && k.endsWith('-auth-token'));
   menuOpen = signal(false);
   scrolled = signal(false);
 

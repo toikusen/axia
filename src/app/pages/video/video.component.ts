@@ -16,14 +16,33 @@ import { Video, getYoutubeThumbnail, getYoutubeEmbedUrl } from '../../core/model
       @if (featured()) {
         <div class="mb-12">
           <div class="aspect-video w-full bg-bg-secondary border border-border overflow-hidden">
-            <iframe
-              [src]="featuredEmbedUrl()"
-              [title]="featured()!.title"
-              class="w-full h-full"
-              frameborder="0"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-              allowfullscreen
-            ></iframe>
+            @if (featuredPlaying()) {
+              <iframe
+                [src]="featuredEmbedUrl()"
+                [title]="featured()!.title"
+                class="w-full h-full"
+                frameborder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowfullscreen
+              ></iframe>
+            } @else {
+              <!-- Facade: YouTube player (~1MB of JS) only loads after a click -->
+              <button type="button" class="group relative w-full h-full cursor-pointer" (click)="playFeatured()"
+                      [attr.aria-label]="'播放 ' + featured()!.title">
+                <img
+                  [src]="getThumbnail(featured()!)"
+                  [alt]="featured()!.title"
+                  fetchpriority="high"
+                  class="w-full h-full object-cover"
+                />
+                <div class="absolute inset-0 flex items-center justify-center bg-bg/40">
+                  <div class="w-16 h-16 rounded-full border-2 border-accent flex items-center justify-center
+                              group-hover:scale-110 transition-transform duration-200">
+                    <span class="text-accent ml-1 text-2xl">▶</span>
+                  </div>
+                </div>
+              </button>
+            }
           </div>
           <p class="text-text-primary mt-4 text-sm">{{ featured()!.title }}</p>
         </div>
@@ -33,7 +52,7 @@ import { Video, getYoutubeThumbnail, getYoutubeEmbedUrl } from '../../core/model
         @for (video of others(); track video.id) {
           <button type="button" class="group cursor-pointer text-left w-full" (click)="selectVideo(video)">
             <div class="aspect-video bg-bg-secondary border border-border overflow-hidden relative">
-              <img
+              <img loading="lazy"
                 [src]="getThumbnail(video)"
                 [alt]="video.title"
                 class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
@@ -60,6 +79,7 @@ export class VideoComponent implements OnInit {
   featured = signal<Video | null>(null);
   others = signal<Video[]>([]);
   featuredEmbedUrl = signal<SafeResourceUrl>('');
+  featuredPlaying = signal(false);
 
   constructor(private service: VideoService, private sanitizer: DomSanitizer) {}
 
@@ -69,11 +89,6 @@ export class VideoComponent implements OnInit {
       const feat = data.find(v => v.is_featured) ?? data[0] ?? null;
       this.featured.set(feat);
       this.others.set(feat ? data.filter(v => v.id !== feat.id) : data);
-      if (feat) {
-        this.featuredEmbedUrl.set(
-          this.sanitizer.bypassSecurityTrustResourceUrl(getYoutubeEmbedUrl(feat.youtube_url))
-        );
-      }
     });
   }
 
@@ -81,12 +96,19 @@ export class VideoComponent implements OnInit {
     return video.thumbnail_url ?? getYoutubeThumbnail(video.youtube_url);
   }
 
+  playFeatured() {
+    const feat = this.featured();
+    if (!feat) return;
+    this.featuredEmbedUrl.set(
+      this.sanitizer.bypassSecurityTrustResourceUrl(`${getYoutubeEmbedUrl(feat.youtube_url)}?autoplay=1`)
+    );
+    this.featuredPlaying.set(true);
+  }
+
   selectVideo(video: Video) {
     this.featured.set(video);
     this.others.set(this.videos().filter(v => v.id !== video.id));
-    this.featuredEmbedUrl.set(
-      this.sanitizer.bypassSecurityTrustResourceUrl(getYoutubeEmbedUrl(video.youtube_url))
-    );
+    this.playFeatured();
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 }

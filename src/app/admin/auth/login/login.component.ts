@@ -3,6 +3,7 @@ import { Component, OnInit, inject, signal } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ButtonModule } from 'primeng/button';
 import { AuthService } from '../../../core/services/auth.service';
+import { ensureStylesheet } from '../../shared/admin.utils';
 
 @Component({
   selector: 'app-login',
@@ -43,6 +44,7 @@ export class LoginComponent implements OnInit {
   protected readonly errorMessage = signal('');
 
   async ngOnInit(): Promise<void> {
+    ensureStylesheet('primeicons.css');
     const errorParam = this.route.snapshot.queryParamMap.get('error');
     if (errorParam === 'unauthorized') {
       this.errorMessage.set('此 Google 帳號無後台存取權限。');

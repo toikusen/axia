@@ -20,7 +20,7 @@ import { Discography, DISCOGRAPHY_TYPE_LABELS } from '../../core/models/discogra
             <!-- Cover -->
             <div class="aspect-square bg-bg-secondary border border-border rounded-sm overflow-hidden mb-3 group-hover:border-accent transition-colors duration-300">
               @if (item.cover_image_url) {
-                <img [src]="item.cover_image_url" [alt]="item.title"
+                <img loading="lazy" [src]="item.cover_image_url" [alt]="item.title"
                      class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
               } @else {
                 <div class="w-full h-full flex items-center justify-center">

@@ -120,3 +120,18 @@ export function formatDateLabel(value: unknown, includeTime = true): string {
     timeStyle: includeTime ? 'short' : undefined,
   }).format(date);
 }
+
+/**
+ * Load a lazily-bundled stylesheet (built with inject:false in angular.json)
+ * exactly once. Admin-only CSS (primeicons, quill theme) stays out of the
+ * public site's global stylesheet.
+ */
+export function ensureStylesheet(href: string): void {
+  if (document.head.querySelector(`link[href="${href}"]`)) {
+    return;
+  }
+  const link = document.createElement('link');
+  link.rel = 'stylesheet';
+  link.href = href;
+  document.head.appendChild(link);
+}

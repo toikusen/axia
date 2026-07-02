@@ -1,5 +1,4 @@
 /* src/styles.css */
-@import 'primeicons/primeicons.css';
 
 /* Cascade layer order: tailwind-base < primeng < tailwind-utilities < unlayered */
 @layer tailwind-base, primeng, tailwind-utilities;

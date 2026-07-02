@@ -18,7 +18,7 @@ import { Goods } from '../../core/models/goods.model';
             <!-- Image -->
             <div class="aspect-square bg-bg-secondary border border-border rounded-sm overflow-hidden mb-3 group-hover:border-accent transition-colors duration-300 relative">
               @if (item.image_url) {
-                <img [src]="item.image_url" [alt]="item.name"
+                <img loading="lazy" [src]="item.image_url" [alt]="item.name"
                      class="w-full h-full object-cover"
                      [class.opacity-40]="item.is_sold_out" />
               }

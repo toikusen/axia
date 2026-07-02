@@ -9,6 +9,8 @@ import { Information } from '../../core/models/information.model';
 import { Schedule } from '../../core/models/schedule.model';
 import { Member } from '../../core/models/member.model';
 
+const HERO_URL_CACHE_KEY = 'axia-hero-url';
+
 @Component({
   selector: 'app-home',
   standalone: true,
@@ -17,8 +19,11 @@ import { Member } from '../../core/models/member.model';
     <!-- Hero Section -->
     <section class="relative overflow-hidden bg-[#0e0c0a] -mt-16 pt-16">
       @if (heroImageUrl()) {
-        <img [src]="heroImageUrl()" alt="AXIA"
+        <img [src]="heroImageUrl()" alt="AXIA" fetchpriority="high"
              class="block mx-auto h-auto w-full max-w-[1180px]" />
+      } @else if (!heroChecked()) {
+        <!-- Placeholder while hero URL loads — avoids logo→image swap (CLS) -->
+        <div class="min-h-[60vh]"></div>
       } @else {
         <div class="relative flex items-center justify-center min-h-[60vh]
                     bg-[radial-gradient(130%_100%_at_50%_42%,#2c2e34_0%,#222428_56%,#1b1d21_100%)]">
@@ -91,7 +96,7 @@ import { Member } from '../../core/models/member.model';
              class="group relative overflow-hidden border border-border hover:border-accent transition-all duration-300 block">
             <div class="aspect-[3/4] bg-bg-secondary overflow-hidden">
               @if (member.photo_url) {
-                <img [src]="member.photo_url" [alt]="member.name"
+                <img [src]="member.photo_url" [alt]="member.name" loading="lazy"
                      class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
               } @else {
                 <div class="w-full h-full flex items-center justify-center">
@@ -111,7 +116,10 @@ import { Member } from '../../core/models/member.model';
 export class HomeComponent implements OnInit {
   latestNews = signal<Information[]>([]);
   upcomingSchedule = signal<Schedule[]>([]);
-  heroImageUrl = signal<string | null>(null);
+  // Seed from localStorage so repeat visitors start the hero download immediately
+  // instead of waiting for the Supabase round-trip (LCP).
+  heroImageUrl = signal<string | null>(localStorage.getItem(HERO_URL_CACHE_KEY));
+  heroChecked = signal(!!localStorage.getItem(HERO_URL_CACHE_KEY));
   members = signal<Member[]>([]);
 
   constructor(
@@ -125,8 +133,16 @@ export class HomeComponent implements OnInit {
     this.infoService.getLatest(3).subscribe(data => this.latestNews.set(data));
     this.scheduleService.getUpcoming(3).subscribe(data => this.upcomingSchedule.set(data));
     this.homeSettingsService.get().subscribe({
-      next: settings => this.heroImageUrl.set(settings.hero_image_url),
-      error: () => {}
+      next: settings => {
+        this.heroImageUrl.set(settings.hero_image_url);
+        this.heroChecked.set(true);
+        if (settings.hero_image_url) {
+          localStorage.setItem(HERO_URL_CACHE_KEY, settings.hero_image_url);
+        } else {
+          localStorage.removeItem(HERO_URL_CACHE_KEY);
+        }
+      },
+      error: () => this.heroChecked.set(true),
     });
     this.memberService.getAll().subscribe(data => this.members.set(data));
   }

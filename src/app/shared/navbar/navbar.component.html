@@ -16,7 +16,7 @@
           class="nav-link"
         >{{ link.label }}</a>
       }
-      @if (authService.currentUser()) {
+      @if (isLoggedIn) {
         <a
           routerLink="/admin"
           class="nav-link text-accent border border-accent/40 rounded px-3 py-1 hover:bg-accent/10 transition-colors"
@@ -60,7 +60,7 @@
           (click)="closeMenu()"
         >{{ link.label }}</a>
       }
-      @if (authService.currentUser()) {
+      @if (isLoggedIn) {
         <a
           routerLink="/admin"
           class="nav-link text-sm block !py-3.5 text-accent"

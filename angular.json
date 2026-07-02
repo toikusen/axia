@@ -32,8 +32,17 @@
               }
             ],
             "styles": [
-              "node_modules/quill/dist/quill.snow.css",
-              "src/styles.css"
+              "src/styles.css",
+              {
+                "input": "node_modules/quill/dist/quill.snow.css",
+                "inject": false,
+                "bundleName": "quill-theme"
+              },
+              {
+                "input": "node_modules/primeicons/primeicons.css",
+                "inject": false,
+                "bundleName": "primeicons"
+              }
             ],
             "scripts": []
           },

@@ -28,7 +28,7 @@ import { Information } from '../../../core/models/information.model';
           }
           <h1 class="font-display text-3xl md:text-4xl text-text-primary mb-8 leading-snug">{{ item()!.title }}</h1>
           @if (item()!.cover_image_url) {
-            <img [src]="item()!.cover_image_url!" [alt]="item()!.title"
+            <img loading="lazy" [src]="item()!.cover_image_url!" [alt]="item()!.title"
                  class="w-full max-h-96 object-contain bg-bg-secondary mb-8 border border-border" />
           }
           <div class="prose-axia prose-axia-light" [innerHTML]="safeContent()"></div>
