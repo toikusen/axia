@@ -8,7 +8,7 @@
 
     <!-- Desktop Nav -->
     <div class="hidden lg:flex items-center gap-8">
-      @for (link of navLinks; track link.path) {
+      @for (link of navLinks(); track link.path) {
         <a
           [routerLink]="link.path"
           routerLinkActive="active"
@@ -51,7 +51,7 @@
     [ngClass]="menuOpen() ? 'max-h-screen py-4' : 'max-h-0'"
   >
     <div class="px-6 flex flex-col gap-4">
-      @for (link of navLinks; track link.path) {
+      @for (link of navLinks(); track link.path) {
         <a
           [routerLink]="link.path"
           routerLinkActive="active"
