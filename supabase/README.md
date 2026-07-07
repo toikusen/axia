@@ -5,6 +5,7 @@
 1. Go to [Supabase Dashboard](https://supabase.com) → Your Project → SQL Editor
 2. Run `001_initial_schema.sql` first (creates all tables + seed data)
 3. Run `002_rls_policies.sql` second (enables RLS + public read policies)
+4. Run `003_nav_visibility.sql` (adds navbar tab visibility column)
 
 ## Tables
 
@@ -17,5 +18,5 @@
 | discography | Singles, EPs, albums |
 | goods | Merchandise items |
 | static_page | RULES pages (fan-rules, privacy, etc.) |
-| home_settings | Homepage hero image + SNS links |
+| home_settings | Homepage hero image + SNS links + navbar tab visibility |
 | contact_submission | Contact form submissions |
