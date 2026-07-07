@@ -156,6 +156,12 @@ export const adminRoutes: Routes = [
             data: { title: 'Home Settings' },
           },
           {
+            path: 'site-settings',
+            loadComponent: () => import('./site-settings/site-settings.component').then(m => m.SiteSettingsComponent),
+            canDeactivate: [unsavedChangesGuard],
+            data: { title: 'Site Settings' },
+          },
+          {
             path: 'audit-log',
             loadComponent: () => import('./audit-log/audit-log.component').then(m => m.AuditLogComponent),
             data: { title: 'Audit Log' },

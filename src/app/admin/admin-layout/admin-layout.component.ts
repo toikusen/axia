@@ -153,6 +153,7 @@ export class AdminLayoutComponent implements OnInit, OnDestroy {
     { label: '規章 / 頁面', link: '/admin/rules', icon: 'pi-file' },
     { label: '聯絡', link: '/admin/contact', icon: 'pi-envelope' },
     { label: '首頁設定', link: '/admin/home-settings', icon: 'pi-cog' },
+    { label: '網站設定', link: '/admin/site-settings', icon: 'pi-sliders-h' },
     { label: '操作紀錄', link: '/admin/audit-log', icon: 'pi-list' },
   ];
 
