@@ -1,11 +1,17 @@
 /* src/styles.css */
 
-/* Cascade layer order: tailwind-base < primeng < tailwind-utilities < unlayered */
+/* Cascade layer order: tailwind-base < primeng < tailwind-utilities < unlayered.
+   Tailwind v3 emits unlayered CSS, so the directives must be wrapped explicitly —
+   otherwise preflight sits outside the layers and overrides the PrimeNG theme. */
 @layer tailwind-base, primeng, tailwind-utilities;
 
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@layer tailwind-base {
+  @tailwind base;
+}
+@layer tailwind-utilities {
+  @tailwind components;
+  @tailwind utilities;
+}
 
 /* ═══════════════════════════════════════════════════════════
    Global base — outside any layer, wins over everything
@@ -201,6 +207,12 @@ textarea.p-inputtext:disabled,
 
 /* Ensure datepicker container fills its form field */
 .p-datepicker { width: 100%; }
+
+/* SelectButton — keep CJK labels on one line */
+.p-togglebutton {
+  white-space: nowrap;
+  padding: 0.5rem 1.25rem;
+}
 
 /* ConfirmDialog */
 .p-confirmdialog .p-dialog {

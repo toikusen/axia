@@ -47,3 +47,4 @@ axia.worktrees/
 # Tool directories
 .playwright-mcp/
 .superpowers/
+.claude-screenshots/

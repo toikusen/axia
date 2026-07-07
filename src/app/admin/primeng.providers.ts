@@ -1,7 +1,7 @@
-import { EnvironmentProviders, Provider } from '@angular/core';
+import { ENVIRONMENT_INITIALIZER, EnvironmentProviders, Provider, inject } from '@angular/core';
 import { MessageService } from 'primeng/api';
-import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
-import { providePrimeNG } from 'primeng/config';
+
+import { PrimeNG } from 'primeng/config';
 import { definePreset } from '@primeng/themes';
 import Aura from '@primeng/themes/aura';
 
@@ -149,20 +149,29 @@ const AxiaAdminPreset = definePreset(Aura, {
  */
 export const adminPrimeNGProviders: (Provider | EnvironmentProviders)[] = [
   MessageService,
-  provideAnimationsAsync(),
-  providePrimeNG({
-    ripple: true,
-    inputStyle: 'outlined',
-    theme: {
-      preset: AxiaAdminPreset,
-      options: {
-        prefix: 'p',
-        darkModeSelector: ':root',
-        cssLayer: {
-          name: 'primeng',
-          order: 'tailwind-base, primeng, tailwind-utilities',
+  {
+    // providePrimeNG() relies on provideAppInitializer, which only runs in the
+    // root injector — at route level it never fires and the theme is never
+    // injected. ENVIRONMENT_INITIALIZER runs when this lazy route's injector
+    // is created, so the theme activates on first /admin visit instead.
+    provide: ENVIRONMENT_INITIALIZER,
+    multi: true,
+    useValue: () => {
+      inject(PrimeNG).setConfig({
+        ripple: true,
+        inputStyle: 'outlined',
+        theme: {
+          preset: AxiaAdminPreset,
+          options: {
+            prefix: 'p',
+            darkModeSelector: ':root',
+            cssLayer: {
+              name: 'primeng',
+              order: 'tailwind-base, primeng, tailwind-utilities',
+            },
+          },
         },
-      },
+      });
     },
-  }),
+  },
 ];
